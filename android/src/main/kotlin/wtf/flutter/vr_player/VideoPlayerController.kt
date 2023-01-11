@@ -284,6 +284,7 @@ class VideoPlayerController(
                 PlayerState.BUFFERING -> {
                     playerEventStateChanged?.success(mapOf(Pair("state", 2)))
                 }
+                else -> {}
             }
         }
 
