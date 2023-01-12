@@ -6,7 +6,7 @@ VR Player Plugin for Flutter
 
 Based on Kaltura Playkit SDK.
 
-The `VrPlayer` plugin allows for the seamless playback of 360° and VR videos on both Android and iOS platforms, providing an immersive viewing experience through the use of touch and device motion controls. These types of videos, commonly referred to as immersive, 360, or spherical videos, are captured by utilizing an omnidirectional camera or multiple cameras to record the entire panoramic view simultaneously.
+The `VrPlayer` plugin lets you play 360° and VR videos smoothly on Android and iOS platforms, delivering an immersive viewing experience with touch and device motion controls. These types of videos, commonly referred to as immersive, 360, or spherical videos, are captured by utilizing an omnidirectional camera or multiple cameras to record the entire panoramic view simultaneously.
 ## Usage
 
 ```dart

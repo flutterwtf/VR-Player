@@ -188,15 +188,15 @@ class VideoPlayerController(
         //Set id for the entry.
         mediaEntry.id = "testEntry"
 
-        //Set media entry type. It could be Live,Vod or Unknown.
-        //In this sample we use Vod.
+        // Set media entry type. It could be Live,Vod or Unknown.
+        // In this sample we use Vod.
         mediaEntry.setIsVRMediaType(true)
         mediaEntry.mediaType = PKMediaEntry.MediaEntryType.Vod
 
-        //Create list that contains at least 1 media source.
-        //Each media entry can contain a couple of different media sources.
-        //All of them represent the same content, the difference is in it format.
-        //For example same entry can contain PKMediaSource with dash and another
+        // Create list that contains at least 1 media source.
+        // Each media entry can contain a couple of different media sources.
+        // All of them represent the same content, the difference is in it format.
+        // For example same entry can contain PKMediaSource with dash and another
         // PKMediaSource can be with hls. The player will decide by itself which source is
         // preferred for playback.
         val mediaSources = createMediaSources(videoUrl)
@@ -215,14 +215,16 @@ class VideoPlayerController(
      */
     private fun createMediaSources(videoUrl: HashMap<*, *>): List<PKMediaSource> {
 
-        //Create new PKMediaSource instance.
+        // Create new PKMediaSource instance.
         val mediaSource = PKMediaSource()
 
-        //Set the id.
+        // Set the id.
         mediaSource.id = "testSource"
 
-        //Set the content url. In our case it will be link to hls source(.m3u8).
-         // //Set the format of the source. In our case it will be hls in case of mpd/wvm formats you have to to call mediaSource.setDrmData method as well
+        // Set the content url. In our case it will be link to hls source(.m3u8).
+        // Set the format of the source.
+        // In our case it will be hls
+        // in case of mpd/wvm formats you have to to call mediaSource.setDrmData method as well
         if (videoUrl.get("videoPath") != null){
             mediaSource.url = videoUrl.get("videoPath") as String
             mediaSource.mediaFormat = PKMediaFormat.mp4
@@ -284,6 +286,7 @@ class VideoPlayerController(
                 PlayerState.BUFFERING -> {
                     playerEventStateChanged?.success(mapOf(Pair("state", 2)))
                 }
+                else -> {}
             }
         }
 
