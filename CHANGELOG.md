@@ -1,4 +1,4 @@
-## 0.1.3
+## 0.1.4
 Fix issue [#1](https://github.com/What-the-Flutter/VR-Player/issues/1)
 
 ## 0.1.1

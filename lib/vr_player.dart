@@ -118,22 +118,26 @@ class VrPlayerObserver {
   /// Init Stream Subscriptions to receive player events
   VrPlayerObserver.init(int id) {
     _eventChannelState = EventChannel('vr_player_events_${id}_state');
-    _stateStreamSubscription = _eventChannelState.receiveBroadcastStream().listen((event) {
+    _stateStreamSubscription =
+        _eventChannelState.receiveBroadcastStream().listen((event) {
       this._onReceiveState?.call(VrState.values[event['state']]);
     });
 
     _eventChannelDuration = EventChannel('vr_player_events_${id}_duration');
-    _durationStreamSubscription = _eventChannelDuration.receiveBroadcastStream().listen((event) {
+    _durationStreamSubscription =
+        _eventChannelDuration.receiveBroadcastStream().listen((event) {
       this._onReceiveDuration?.call(event['duration']);
     });
 
     _eventChannelPosition = EventChannel('vr_player_events_${id}_position');
-    _positionStreamSubscription = _eventChannelPosition.receiveBroadcastStream().listen((event) {
+    _positionStreamSubscription =
+        _eventChannelPosition.receiveBroadcastStream().listen((event) {
       this._onReceivePosition?.call(event['currentPosition']);
     });
 
     _eventChannelEnded = EventChannel('vr_player_events_${id}_ended');
-    _endedStreamSubscription = _eventChannelEnded.receiveBroadcastStream().listen((event) {
+    _endedStreamSubscription =
+        _eventChannelEnded.receiveBroadcastStream().listen((event) {
       this._onReceiveFinished?.call(event['ended'] ?? false);
     });
   }
@@ -167,7 +171,10 @@ class VrPlayerObserver {
   }
 }
 
-typedef void VrPlayerCreatedCallback(VrPlayerController controller, VrPlayerObserver observer);
+typedef void VrPlayerCreatedCallback(
+  VrPlayerController controller,
+  VrPlayerObserver observer,
+);
 
 class VrPlayer extends StatefulWidget {
   final VrPlayerCreatedCallback onCreated;
@@ -271,7 +278,8 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
           );
         },
         onCreatePlatformView: (params) {
-          final AndroidViewController controller = PlatformViewsService.initExpensiveAndroidView(
+          final AndroidViewController controller =
+              PlatformViewsService.initExpensiveAndroidView(
             id: params.id,
             creationParams: {},
             creationParamsCodec: const StandardMessageCodec(),
