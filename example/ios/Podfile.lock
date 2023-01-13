@@ -1,0 +1,73 @@
+PODS:
+  - Flutter (1.0.0)
+  - KalturaNetKit (1.5.1):
+    - KalturaNetKit/Core (= 1.5.1)
+  - KalturaNetKit/Core (1.5.1):
+    - SwiftyJSON (= 5.0.0)
+  - ObjcExceptionBridging (1.0.1):
+    - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
+  - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
+  - PlayKit/AnalyticsCommon (3.27.0):
+    - PlayKit/Core
+  - PlayKit/Core (3.27.0):
+    - KalturaNetKit (~> 1.5.1)
+    - PlayKitUtils (~> 0.5)
+    - SwiftyJSON (= 5.0.0)
+    - XCGLogger (= 7.0.0)
+  - PlayKitProviders (1.18.0):
+    - KalturaNetKit (~> 1.5)
+    - PlayKit/AnalyticsCommon (~> 3.27)
+    - PlayKitUtils (~> 0.5)
+    - SwiftyXMLParser (= 5.0.0)
+  - PlayKitUtils (0.5.0)
+  - PlayKitVR (1.3.0):
+    - PlayKit/Core
+  - SwiftyJSON (5.0.0)
+  - SwiftyXMLParser (5.0.0)
+  - vr_player (0.0.1):
+    - Flutter
+    - PlayKitProviders
+    - PlayKitVR (~> 1.3.0)
+  - XCGLogger (7.0.0):
+    - XCGLogger/Core (= 7.0.0)
+  - XCGLogger/Core (7.0.0):
+    - ObjcExceptionBridging
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - vr_player (from `.symlinks/plugins/vr_player/ios`)
+
+SPEC REPOS:
+  trunk:
+    - KalturaNetKit
+    - ObjcExceptionBridging
+    - PlayKit
+    - PlayKitProviders
+    - PlayKitUtils
+    - PlayKitVR
+    - SwiftyJSON
+    - SwiftyXMLParser
+    - XCGLogger
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  vr_player:
+    :path: ".symlinks/plugins/vr_player/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  KalturaNetKit: 8774fdc2e73d3d013c3df88aa49376dd922d3606
+  ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
+  PlayKit: fa104ddf19b0894f0c395d0837e1c8f0650bec8e
+  PlayKitProviders: 5dc0b4abd2c278b62146c6f9b51cdb2746bf3d17
+  PlayKitUtils: 8edb43515c8b91d9aa9a47ae8b5af1e7dd58f6f3
+  PlayKitVR: f8e0d16d011b7092838819d4e649d5d77923b62d
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  SwiftyXMLParser: 5ebb8793192f403fa8cc691045143906122a7a75
+  vr_player: 3b22470823baa03523a3b79bd298b9dda58e079f
+  XCGLogger: 0434f15e3909cdc450bb63faf638b8792ab782ab
+
+PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+
+COCOAPODS: 1.11.3
