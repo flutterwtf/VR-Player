@@ -18,7 +18,7 @@ VrPlayer(
   height: playerHeight,
 ),
 ```
-You must implement `onViewPlayerCreated` to receve player events
+You must implement `onViewPlayerCreated` to receive player events.
 
 ```dart
 void onViewPlayerCreated(
@@ -26,10 +26,14 @@ void onViewPlayerCreated(
   VrPlayerObserver observer
 ) {
   this.viewPlayerController = controller;
+  /// Receive player state [loading, ready, buffering]
   observer.handleStateChange(this.onReceiveState);
+  /// Receive duration in millis
   observer.handleDurationChange(this.onReceiveDuration);
+  /// Receive current position in millis
   observer.handlePositionChange(this.onReceivePosition);
-  observer.handleEndedChange(this.onReceiveEnded);
+  /// Receive when video is finished
+  observer.handleFinishedChange(this.onReceiveFinished);
   this.viewPlayerController.loadVideo(
     videoUrl: "https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8"
   );
@@ -37,7 +41,7 @@ void onViewPlayerCreated(
 ```
 ### VrPlayerController
 
-The `VrPlayerController` can be used to change the state of a `VrPlayer`  Note that the methods can only be used after the `VrPlayer` has been created,
+The `VrPlayerController` can be used to change the state of a `VrPlayer`  Note that the methods can only be used after the `VrPlayer` has been created.
 
  Method | Description 
 --- | ---
