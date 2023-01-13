@@ -236,55 +236,49 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
     this._viewPlayerController = controller;
     observer.handleStateChange(this.onReceiveState);
     observer.handleDurationChange(this.onReceiveDuration);
-    observer.handlePositionChange(this.onReceivePosition);
-    observer.handleEndedChange(this.onReceiveEnded);
+    observer.handlePositionChange(this.onChangePosition);
+    observer.handleFinishedChange(this.onReceiveEnded);
     this._viewPlayerController.loadVideo(
           videoUrl: "https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8",
         );
   }
 
-  void onReceiveState(Map event) {
-    switch (event["state"]) {
-      case 0:
-        // Loading
+  void onReceiveState(VrState state) {
+    switch (state) {
+      case VrState.loading:
         setState(() {
           this.isVideoLoading = true;
         });
         break;
-      case 1:
-        // Ready
+      case VrState.ready:
         setState(() {
           this.isVideoLoading = false;
           this.isVideoReady = true;
         });
         break;
-      case 2:
-        // Buffering
+      case VrState.buffering:
+      case VrState.idle:
         break;
     }
   }
 
-  void onReceiveDuration(Map<String, dynamic> event) {
+  void onReceiveDuration(int millis) {
     setState(() {
-      _intDuration = event['duration'];
-      this._duration = millisecondsToDateTime(event['duration']);
+      _intDuration = millis;
+      this._duration = millisecondsToDateTime(millis);
     });
   }
 
-  void onReceivePosition(Map<String, dynamic> event) {
-    onChangePosition(event['currentPosition']);
-  }
-
-  void onChangePosition(position) {
+  void onChangePosition(int millis) {
     setState(() {
-      this._currentPosition = millisecondsToDateTime(position);
-      _seekPosition = position.toDouble();
+      this._currentPosition = millisecondsToDateTime(millis);
+      _seekPosition = millis.toDouble();
     });
   }
 
-  void onReceiveEnded(Map event) {
+  void onReceiveEnded(bool isFinished) {
     setState(() {
-      this._isVideoFinished = event["ended"] ?? false;
+      this._isVideoFinished = isFinished;
     });
   }
 

@@ -89,6 +89,12 @@ class VrPlayerController {
   }
 }
 
+/// Enum for showing the player state
+enum VrState {
+  loading, ready, buffering, idle,
+}
+
+/// [VrPlayerObserver] is required for listening to player notifications
 class VrPlayerObserver {
   late EventChannel _eventChannelState;
   late EventChannel _eventChannelDuration;
@@ -100,34 +106,35 @@ class VrPlayerObserver {
   late StreamSubscription _durationStreamSubscription;
   late StreamSubscription _endedStreamSubscription;
 
-  late Function _onReceiveState;
-  late Function _onReceiveDuration;
-  late Function _onReceivePosition;
-  late Function _onReceiveEnded;
+  Function? _onReceiveState;
+  Function? _onReceiveDuration;
+  Function? _onReceivePosition;
+  Function? _onReceiveFinished;
 
   /// Init Stream Subscriptions to receive player events
   VrPlayerObserver.init(int id) {
     _eventChannelState = EventChannel('vr_player_events_${id}_state');
-    _stateStreamSubscription = _eventChannelState.receiveBroadcastStream().listen((duration) {
-      this._onReceiveState(duration);
+    _stateStreamSubscription = _eventChannelState.receiveBroadcastStream().listen((event) {
+      this._onReceiveState?.call(VrState.values[event['state']]);
     });
 
     _eventChannelDuration = EventChannel('vr_player_events_${id}_duration');
-    _durationStreamSubscription = _eventChannelDuration.receiveBroadcastStream().listen((duration) {
-      this._onReceiveDuration(duration);
+    _durationStreamSubscription = _eventChannelDuration.receiveBroadcastStream().listen((event) {
+      this._onReceiveDuration?.call(event['duration']);
     });
 
     _eventChannelPosition = EventChannel('vr_player_events_${id}_position');
-    _positionStreamSubscription = _eventChannelPosition.receiveBroadcastStream().listen((duration) {
-      this._onReceivePosition(duration);
+    _positionStreamSubscription = _eventChannelPosition.receiveBroadcastStream().listen((event) {
+      this._onReceivePosition?.call(event['currentPosition']);
     });
 
     _eventChannelEnded = EventChannel('vr_player_events_${id}_ended');
-    _endedStreamSubscription = _eventChannelEnded.receiveBroadcastStream().listen((duration) {
-      this._onReceiveEnded(duration);
+    _endedStreamSubscription = _eventChannelEnded.receiveBroadcastStream().listen((event) {
+      this._onReceiveFinished?.call(event['ended'] ?? false);
     });
   }
 
+  /// Used to stop listening for updates
   void cancelListeners() {
     _stateStreamSubscription.cancel();
     _durationStreamSubscription.cancel();
@@ -136,23 +143,23 @@ class VrPlayerObserver {
   }
 
   /// Used to receive player events
-  void handleStateChange(Function onReceiveDuration) {
-    this._onReceiveState = onReceiveDuration;
+  void handleStateChange(ValueChanged<VrState>? onReceiveState) {
+    this._onReceiveState = onReceiveState;
   }
 
-  /// Used to receive video duration
-  void handleDurationChange(Function onReceiveDuration) {
+  /// Used to receive video duration in millis
+  void handleDurationChange(ValueChanged<int>? onReceiveDuration) {
     this._onReceiveDuration = onReceiveDuration;
   }
 
-  /// Used to receive current video position
-  void handlePositionChange(Function onReceiveDuration) {
-    this._onReceivePosition = onReceiveDuration;
+  /// Used to receive current video position in millis
+  void handlePositionChange(ValueChanged<int>? onReceivePosition) {
+    this._onReceivePosition = onReceivePosition;
   }
 
   /// Invokes when video is ended
-  handleEndedChange(Function onReceiveDuration) {
-    this._onReceiveEnded = onReceiveDuration;
+  void handleFinishedChange(ValueChanged<bool>? onReceiveFinished) {
+    this._onReceiveFinished = onReceiveFinished;
   }
 }
 
