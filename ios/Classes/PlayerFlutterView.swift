@@ -1,8 +1,3 @@
-//
-//  PlayerFlutterView.swift
-//  KalturaNetKit
-//
-
 import Flutter
 import PlayKit
 import PlayKitProviders
@@ -41,8 +36,6 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
     private let viewId: Int64
     
     private let args: Dictionary<String, Any>?
-    private let serverUrl: String?
-    private let partnerID: String?
     
     private let player: Player = PlayKitManager.shared.loadPlayer(pluginConfig: nil)
     private let flutterView: PlayerView
@@ -53,9 +46,6 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
     init(frame: CGRect, viewId: Int64, arguments: [String: Any]?, messenger: FlutterBinaryMessenger) {
         self.viewId = viewId;
         self.args = arguments
-        
-        self.serverUrl = arguments?["ovpServerUrl"] as? String
-        self.partnerID = arguments?["partnerId"] as? String
         
         self.channel = FlutterMethodChannel(
             name: String(format: "vr_player_%lld", viewId),
@@ -107,13 +97,8 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
     func view() -> UIView {
         return flutterView
     }
-    
-    //MARK: FlutterMethodChannel
+
     func methodCallback(call: FlutterMethodCall, result: FlutterResult)  {
-        
-#if DEBUG
-        //    NSLog("ios: FlutterMethod %@ - Arguments -> %@", call.method, call.arguments.debugDescription)
-#endif
         
         switch call.method {
         case "loadVideo":
@@ -153,7 +138,7 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
         let contentPath = arguments?["videoPath"] as? String
         
         // create media source and initialize a media entry with that source
-        let entryId = "sintel"
+        let entryId = "entry"
         
         if (contentPath != nil) {
             let simpleStorage = DefaultLocalDataStore.defaultDataStore()
@@ -222,8 +207,8 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
         }
         
         let seekTimeInterval: TimeInterval
-        if let timePostion = arguments["position"] as? TimeInterval {
-            seekTimeInterval = timePostion / 1_000.0
+        if let timePosition = arguments["position"] as? TimeInterval {
+            seekTimeInterval = timePosition / 1_000.0
         } else {
             seekTimeInterval = 0.0
         }
@@ -274,7 +259,6 @@ class KalturaFlutterEventChannel: NSObject, FlutterStreamHandler {
     func playerEventListener(playerEvent: PKEvent) { }
     
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        print(#function)
         eventSink = events
         if let arguments = arguments {
             print(arguments)
@@ -283,7 +267,6 @@ class KalturaFlutterEventChannel: NSObject, FlutterStreamHandler {
     }
     
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        print(#function)
         eventSink = nil
         playerEngine.removeObserver(self, events: playerEvents)
         if let arguments = arguments {

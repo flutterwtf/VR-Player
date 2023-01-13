@@ -19,9 +19,8 @@ Pod::Spec.new do |s|
   # ――― Author Metadata ―――#
   s.authors = {
     'Kaltura' => 'community@kaltura.com',
-    'Fabio Akira' => 'fab.takahashi@gmail.com',
+    'What the Flutter' => 'dev@flutter.wtf',
   }
-  s.social_media_url = 'https://github.com/fabio-akira'
 
   # ――― Platform Specifics ―――#
   s.platform = :ios, "9.0"
