@@ -109,6 +109,8 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
             onSizeChanged(arguments: call.arguments, result: result)
         case "isPlaying":
             isPlaying(arguments: call.arguments, result: result)
+        case "setVolume" :
+            setVolume(arguments: call.arguments, result: result)
         case "play":
             play(arguments: call.arguments, result: result)
         case "pause":
@@ -186,6 +188,12 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
     
     private func pause(arguments: Any?, result: FlutterResult) {
         player.pause()
+        result(nil)
+    }
+
+    private func setVolume(arguments: [Double: Any], result: FlutterResult) {
+        let volume = arguments["volume"] as? Double
+        player.setVolume(arguments["volume"] )
         result(nil)
     }
     

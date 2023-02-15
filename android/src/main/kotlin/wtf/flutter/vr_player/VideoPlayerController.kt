@@ -101,6 +101,12 @@ class VideoPlayerController(
                     }
                 }
             }
+            "setVolume" -> {
+                (methodCall.arguments as? HashMap<*, *>)?.get("volume")?.toString()
+                    ?.toFloatOrNull()?.let { volume ->
+                        player?.setVolume(volume)
+                    }
+            }
             "play" -> {
                 player?.play()
                 result.success(true)
