@@ -45,8 +45,12 @@ class VrPlayerController {
   }
 
   //Set player volume from 0 to 1
-  Future<void> setVolume(double volume) {
-    return _channel.invokeMethod('setVolume', volume);
+  setVolume(double volume) {
+    try {
+      return _channel.invokeMethod('setVolume', {"volume": volume});
+    } on PlatformException catch (e) {
+      print('${e.code}: ${e.message}');
+    }
   }
 
   /// Enable/disable fullscreen mode
