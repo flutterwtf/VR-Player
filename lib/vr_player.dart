@@ -39,6 +39,10 @@ class VrPlayerController {
     return _channel.invokeMethod('play');
   }
 
+  Future<void> toggleGyro() {
+    return _channel.invokeMethod('toggleGyro');
+  }
+
   /// Pause video
   Future<void> pause() {
     return _channel.invokeMethod('pause');
