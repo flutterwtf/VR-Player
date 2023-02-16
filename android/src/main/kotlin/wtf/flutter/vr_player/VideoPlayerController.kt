@@ -171,6 +171,7 @@ class VideoPlayerController(
         this.videoUrl?.let {
             loadMedia(it, null)
         }
+        player?.play()
     }
 
     private fun toggleVRMode() {
@@ -324,13 +325,7 @@ class VideoPlayerController(
         vrSettings.isVrModeEnabled = false
         if (isGyroEnabled) vrSettings.interactionMode = VRInteractionMode.MotionWithTouch
             else vrSettings.interactionMode = VRInteractionMode.Touch
-        vrSettings.interactionMode = VRInteractionMode.CardboardMotionWithTouch
         vrSettings.isZoomWithPinchEnabled = true
-
-        val interactionMode = vrSettings.interactionMode
-        if (!VRUtil.isModeSupported(context, interactionMode)) {
-            vrSettings.interactionMode = VRInteractionMode.Touch
-        }
         return vrSettings
     }
 
