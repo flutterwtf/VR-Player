@@ -206,7 +206,7 @@ class VrPlayer extends StatefulWidget {
     required this.y,
     required this.width,
     required this.height,
-  });
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
