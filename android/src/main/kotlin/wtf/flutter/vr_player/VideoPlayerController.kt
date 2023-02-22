@@ -30,7 +30,6 @@ class VideoPlayerController(
     private var mediaEntry: PKMediaEntry? = null
     private var videoPlayerState: VideoPlayerState? = null
     private var isVRModeEnabled: Boolean = false
-    private var isGyroEnabled: Boolean = false
 
     private var playerEventStateChanged: EventChannel.EventSink? = null
     private var playerEventDurationChanged: EventChannel.EventSink? = null
@@ -116,10 +115,6 @@ class VideoPlayerController(
             }
             "isPlaying" -> {
                 result.success(player?.isPlaying == true)
-            }
-            "toggleGyro" -> {
-                isGyroEnabled = !isGyroEnabled
-                reloadPlayer();
             }
             "onSizeChanged" -> {
                 if (mediaEntry?.isVRMediaType == true) {
@@ -323,7 +318,7 @@ class VideoPlayerController(
         val vrSettings = VRSettings()
         vrSettings.isFlingEnabled = true
         vrSettings.isVrModeEnabled = false
-        if (isGyroEnabled) vrSettings.interactionMode = VRInteractionMode.MotionWithTouch
+        if (isVRModeEnabled) vrSettings.interactionMode = VRInteractionMode.MotionWithTouch
             else vrSettings.interactionMode = VRInteractionMode.Touch
         vrSettings.isZoomWithPinchEnabled = true
         return vrSettings

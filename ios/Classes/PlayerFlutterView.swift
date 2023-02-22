@@ -110,7 +110,7 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
         case "isPlaying":
             isPlaying(arguments: call.arguments, result: result)
         case "setVolume" :
-            setVolume(arguments: call.arguments, result: result)
+            setVolume(arguments: call.arguments as? [String: Any], result: result)
         case "play":
             play(arguments: call.arguments, result: result)
         case "pause":
@@ -191,11 +191,12 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
         result(nil)
     }
 
-    private func setVolume(arguments: [Double: Any], result: FlutterResult) {
-        let volume = arguments["volume"] as? Double
-        player.setVolume(arguments["volume"] )
+    private func setVolume(arguments: [String: Any]?, result: FlutterResult) {
+        let volume = arguments?["volume"] as? Float
+        player.volume = volume ?? 0.0
         result(nil)
     }
+    
     
     private func toggleVRMode(arguments: Any?, result: FlutterResult) {
         guard let vrController = self.player.getController(ofType: PKVRController.self) else {
