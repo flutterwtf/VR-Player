@@ -44,7 +44,7 @@ class VrPlayerController {
     return _channel.invokeMethod('pause');
   }
 
-  //Set player volume from 0 to 1
+  /// Set player volume from 0 to 1
   setVolume(double volume) {
     try {
       return _channel.invokeMethod('setVolume', {"volume": volume});
