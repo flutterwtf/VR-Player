@@ -50,7 +50,7 @@ The `VrPlayerController` can be used to change the state of a `VrPlayer`  Note t
 `play()` | Play video.
 `pause()` | Pause video.
 `seekTo()` | Seek to position.
-`setVolume()` | Set video volume level from 0(no sound) to 1(max).
+`setVolume()` | Set video volume level from 0 (no sound) to 1 (max).
 `fullScreen()` | *(Android only)* Enable/disable fullscreen mode.  On IOS  you need to pass new width and height to VrPlayer widget
 `toggleVRMode()` | Switch between 360° mode and VR mode. 
 `onSizeChanged()` | *(Android only)* Reload player when you need to change size of nativeView.

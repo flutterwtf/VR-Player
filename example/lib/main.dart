@@ -162,9 +162,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                           ),
                           child: Slider(
                             value: _seekPosition!,
-                            max: _intDuration == null
-                                ? 0.0
-                                : _intDuration!.toDouble(),
+                            max: _intDuration?.toDouble() ?? 0.0,
                             onChangeEnd: (value) {
                               _viewPlayerController.seekTo(value.toInt());
                             },
@@ -247,7 +245,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
         DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
       ]);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [],
+      );
     } else {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,
@@ -255,8 +256,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ]);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-          overlays: SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: SystemUiOverlay.values,
+      );
     }
   }
 
@@ -278,7 +281,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   }
 
   void onViewPlayerCreated(
-      VrPlayerController controller, VrPlayerObserver observer) {
+    VrPlayerController controller,
+    VrPlayerObserver observer,
+  ) {
     this._viewPlayerController = controller;
     observer.handleStateChange(this.onReceiveState);
     observer.handleDurationChange(this.onReceiveDuration);
