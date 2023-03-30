@@ -101,6 +101,10 @@ class VideoPlayerController(
                     }
                 }
             }
+            "setVolume" -> {
+                val volume: Float = methodCall.argument("volume")!!
+                player?.setVolume(volume)
+            }
             "play" -> {
                 player?.play()
                 result.success(true)
@@ -112,6 +116,7 @@ class VideoPlayerController(
             "isPlaying" -> {
                 result.success(player?.isPlaying == true)
             }
+
             "onSizeChanged" -> {
                 if (mediaEntry?.isVRMediaType == true) {
                     reloadPlayer()
@@ -172,7 +177,6 @@ class VideoPlayerController(
             isVRModeEnabled = !isVRModeEnabled
         }
     }
-
     private fun loadMedia(videoUrl: HashMap<*, *>, result: MethodChannel.Result?) {
         this.videoUrl = videoUrl
         this.mediaEntry = createMediaEntry(videoUrl)
@@ -313,13 +317,11 @@ class VideoPlayerController(
         val vrSettings = VRSettings()
         vrSettings.isFlingEnabled = true
         vrSettings.isVrModeEnabled = false
-        vrSettings.interactionMode = VRInteractionMode.CardboardMotionWithTouch
-        vrSettings.isZoomWithPinchEnabled = true
 
-        val interactionMode = vrSettings.interactionMode
-        if (!VRUtil.isModeSupported(context, interactionMode)) {
-            vrSettings.interactionMode = VRInteractionMode.Touch
-        }
+        if (isVRModeEnabled) vrSettings.interactionMode = VRInteractionMode.MotionWithTouch
+            else vrSettings.interactionMode = VRInteractionMode.Touch
+
+        vrSettings.isZoomWithPinchEnabled = true
         return vrSettings
     }
 

@@ -56,7 +56,8 @@ class VideoPlayerPage extends StatefulWidget {
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
 }
 
-class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderStateMixin {
+class _VideoPlayerPageState extends State<VideoPlayerPage>
+    with TickerProviderStateMixin {
   late VrPlayerController _viewPlayerController;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -64,6 +65,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
   bool _isPlaying = false;
   bool _isFullScreen = false;
   bool _isVideoFinished = false;
+  bool _isLandscapeOrientation = false;
+  bool _isVolumeSliderShown = false;
+  bool _isVolumeEnabled = true;
   late double _playerWidth;
   late double _playerHeight;
   String? _duration;
@@ -72,16 +76,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
   bool isVideoReady = false;
   String? _currentPosition;
   double? _seekPosition = 0.0;
+  double _currentSliderValue = 0.1;
 
   @override
   void initState() {
-    _animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
     _toggleShowingBar();
     super.initState();
   }
 
   void _toggleShowingBar() {
+    switchVolumeSliderDisplay(false);
+
     _isShowingBar = !_isShowingBar;
     if (_isShowingBar) {
       _animationController.forward();
@@ -93,10 +101,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     _playerWidth = MediaQuery.of(context).size.width;
-    _playerHeight = _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2.0;
+    _playerHeight =
+        _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2.0;
+    _isLandscapeOrientation =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
-      appBar: AppBar(title: Text("VR Player")),
+      appBar: AppBar(
+        title: Text("VR Player"),
+      ),
       body: GestureDetector(
         onTap: () => _toggleShowingBar(),
         child: Stack(
@@ -141,13 +154,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
                             inactiveTrackColor: Colors.grey,
                             trackHeight: 5.0,
                             thumbColor: Colors.white,
-                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8.0),
+                            thumbShape:
+                                RoundSliderThumbShape(enabledThumbRadius: 8.0),
                             overlayColor: Colors.purple.withAlpha(32),
-                            overlayShape: RoundSliderOverlayShape(overlayRadius: 14.0),
+                            overlayShape:
+                                RoundSliderOverlayShape(overlayRadius: 14.0),
                           ),
                           child: Slider(
                             value: _seekPosition!,
-                            max: _intDuration == null ? 0.0 : _intDuration!.toDouble(),
+                            max: _intDuration?.toDouble() ?? 0.0,
                             onChangeEnd: (value) {
                               _viewPlayerController.seekTo(value.toInt());
                             },
@@ -161,9 +176,21 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
                         _duration?.toString() ?? '99:99',
                         style: TextStyle(color: Colors.white),
                       ),
+                      if (_isFullScreen || _isLandscapeOrientation)
+                        IconButton(
+                          icon: Icon(
+                            _isVolumeEnabled
+                                ? Icons.volume_up_rounded
+                                : Icons.volume_off_rounded,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => switchVolumeSliderDisplay(true),
+                        ),
                       IconButton(
                         icon: Icon(
-                          _isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                          _isFullScreen
+                              ? Icons.fullscreen_exit
+                              : Icons.fullscreen,
                           color: Colors.white,
                         ),
                         onPressed: fullScreenPressed,
@@ -181,7 +208,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
                   ),
                 ),
               ),
-            )
+            ),
+            Positioned(
+              height: 180.0,
+              right: 4.0,
+              top: MediaQuery.of(context).size.height / 4,
+              child: _isVolumeSliderShown
+                  ? RotatedBox(
+                      quarterTurns: 3,
+                      child: Slider(
+                        value: _currentSliderValue,
+                        divisions: 10,
+                        onChanged: onChangeVolumeSlider,
+                      ),
+                    )
+                  : SizedBox(),
+            ),
           ],
         ),
       ),
@@ -203,7 +245,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
         DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
       ]);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [],
+      );
     } else {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,
@@ -211,7 +256,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ]);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: SystemUiOverlay.values,
+      );
     }
   }
 
@@ -232,14 +280,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
     });
   }
 
-  void onViewPlayerCreated(VrPlayerController controller, VrPlayerObserver observer) {
+  void onViewPlayerCreated(
+    VrPlayerController controller,
+    VrPlayerObserver observer,
+  ) {
     this._viewPlayerController = controller;
     observer.handleStateChange(this.onReceiveState);
     observer.handleDurationChange(this.onReceiveDuration);
     observer.handlePositionChange(this.onChangePosition);
     observer.handleFinishedChange(this.onReceiveEnded);
     this._viewPlayerController.loadVideo(
-          videoUrl: "https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8",
+          videoUrl:
+              "https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8",
         );
   }
 
@@ -279,6 +331,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
   void onReceiveEnded(bool isFinished) {
     setState(() {
       this._isVideoFinished = isFinished;
+    });
+  }
+
+  void onChangeVolumeSlider(double value) {
+    _viewPlayerController.setVolume(value);
+    setState(() {
+      _isVolumeEnabled = value != 0.0;
+      _currentSliderValue = value;
+    });
+  }
+
+  void switchVolumeSliderDisplay(bool show) {
+    setState(() {
+      _isVolumeSliderShown = show;
     });
   }
 
