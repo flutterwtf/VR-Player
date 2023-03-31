@@ -44,6 +44,15 @@ class VrPlayerController {
     return _channel.invokeMethod('pause');
   }
 
+  /// Set player volume from 0 to 1
+  setVolume(double volume) {
+    try {
+      return _channel.invokeMethod('setVolume', {"volume": volume});
+    } on PlatformException catch (e) {
+      print('${e.code}: ${e.message}');
+    }
+  }
+
   /// Enable/disable fullscreen mode
   /// Works only on Android. On IOS  you need to pass new [width] and [height] to [VrPlayer] widget
   Future<void> fullScreen() {
@@ -193,7 +202,7 @@ class VrPlayer extends StatefulWidget {
     required this.y,
     required this.width,
     required this.height,
-  });
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
