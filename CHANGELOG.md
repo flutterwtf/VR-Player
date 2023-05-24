@@ -1,3 +1,6 @@
+## 0.2.0
+Update pacakge to Flutter 3.10.
+
 ## 0.1.5
 setVolume() method added. Player volume slider added.
 

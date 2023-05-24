@@ -1,0 +1,70 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  plugins:
+    - dart_code_metrics
+
+  language:
+    strict-casts: false
+    strict-inference: false
+    strict-raw-types: false
+
+  errors:
+    close_sinks: error
+    missing_required_param: error
+    missing_return: error
+    # remove line below to enable doc lints
+    public_member_api_docs: ignore
+    sort_pub_dependencies: ignore
+    unawaited_futures: ignore
+    sort_constructors_first: ignore
+    mixin_inherits_from_not_object: ignore
+
+  exclude:
+    - "build/**"
+    - "**/*.g.dart"
+    - "**/*.gr.dart"
+    - "**/*.freezed.dart"
+    - "**/*.config.dart"
+
+dart_code_metrics:
+  extends:
+    - package:dart_code_metrics_presets/all.yaml
+  rules:
+    - prefer-moving-to-variable:
+        allowed-duplicated-chains: 3
+    - arguments-ordering: false
+    - avoid-banned-imports: false
+    - avoid-missing-enum-constant-in-map: false
+    - avoid-non-null-assertion: false
+    - avoid-top-level-members-in-tests: false
+    - no-empty-block: false
+    - check-for-equals-in-render-object-setters: false
+    - prefer-extracting-callbacks: false
+    - consistent-update-render-object: false
+    - prefer-correct-identifier-length:
+        min-identifier-length: 1
+        max-identifier-length: 25
+    - avoid-late-keyword: false
+    - newline-before-return: false
+    - avoid-ignoring-return-values: false
+    - prefer-commenting-analyzer-ignores: false
+    - no-equal-arguments: false
+    - avoid-dynamic: false
+    - prefer-single-widget-per-file: false
+    - avoid-nested-conditional-expressions:
+        acceptable-level: 2
+    - format-comment: false
+    - prefer-static-class: false
+    - no-magic-number:
+        exclude:
+          - test/**
+  metrcis:
+    - cyclomatic-complexity: 10
+    - maximum-nesting-level: 5
+    - source-lines-of-code: 50
+
+
+linter:
+  rules:
+    library_private_types_in_public_api: false
