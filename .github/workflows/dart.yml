@@ -1,0 +1,33 @@
+name: Vr-Player CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      - name: Analyze project source
+        run: dart analyze
+        
+      - name: Analyzing
+        run: flutter analyze
+
+      - name: Running test
+        run: flutter test --coverage
+
+      - name: Coverage check
+        run: |
+          lcov --remove coverage/lcov.info '*.g.dart' '*.part.dart' '*/generated/*' -o coverage/lcov.info
+          ../scripts/coverage_check.sh
