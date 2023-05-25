@@ -26,7 +26,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -48,11 +48,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.kaltura.player:tvplayer:4.24.0'
-    implementation 'com.kaltura.playkit:vrplugin:4.24.0'
-
-//    implementation 'com.kaltura.playkit:playkit:4.6.0'
-//    implementation 'com.kaltura.playkit:playkitproviders:4.6.0'
-//    implementation 'com.kaltura:playkit-android-vr:4.6.0'
+    implementation 'com.kaltura.player:tvplayer:4.28.3'
+    implementation 'com.kaltura.playkit:vrplugin:4.28.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

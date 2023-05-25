@@ -208,7 +208,7 @@ class VrPlayer extends StatefulWidget {
   State<StatefulWidget> createState() => _VideoPlayerState();
 }
 
-class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
+class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver { 
   late VrPlayerController _videoPlayerController;
   late VrPlayerObserver _playerObserver;
   bool _wasResumed = false;
