@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_int_literals
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vr_player/vr_player.dart';
@@ -84,14 +82,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   bool isVideoReady = false;
   String? _currentPosition;
   double _currentSliderValue = 0.1;
-  double _seekPosition = 0.0;
+  double _seekPosition = 0;
 
 
   @override
   void initState() {
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
     _toggleShowingBar();
     super.initState();
   }
@@ -111,7 +109,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   Widget build(BuildContext context) {
     _playerWidth = MediaQuery.of(context).size.width;
     _playerHeight =
-        _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2.0;
+        _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2;
     _isLandscapeOrientation =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -161,19 +159,19 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                           data: SliderTheme.of(context).copyWith(
                             activeTrackColor: Colors.amberAccent,
                             inactiveTrackColor: Colors.grey,
-                            trackHeight: 5.0,
+                            trackHeight: 5,
                             thumbColor: Colors.white,
                             thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 8.0,
+                              enabledThumbRadius: 8,
                             ),
                             overlayColor: Colors.purple.withAlpha(32),
                             overlayShape: const RoundSliderOverlayShape(
-                              overlayRadius: 14.0,
+                              overlayRadius: 14,
                             ),
                           ),
                           child: Slider(
                             value: _seekPosition,
-                            max: _intDuration?.toDouble() ?? 0.0,
+                            max: _intDuration?.toDouble() ?? 0,
                             onChangeEnd: (value) {
                               _viewPlayerController.seekTo(value.toInt());
                             },
@@ -223,8 +221,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
               ),
             ),
             Positioned(
-              height: 180.0,
-              right: 4.0,
+              height: 180,
+              right: 4,
               top: MediaQuery.of(context).size.height / 4,
               child: _isVolumeSliderShown
                   ? RotatedBox(
@@ -352,7 +350,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   void onChangeVolumeSlider(double value) {
     _viewPlayerController.setVolume(value);
     setState(() {
-      _isVolumeEnabled = value != 0.0;
+      _isVolumeEnabled = value != 0;
       _currentSliderValue = value;
     });
   }
