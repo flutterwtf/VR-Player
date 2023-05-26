@@ -84,7 +84,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   double _currentSliderValue = 0.1;
   double _seekPosition = 0;
 
-
   @override
   void initState() {
     _animationController =
@@ -356,6 +355,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   }
 
   void switchVolumeSliderDisplay({required bool show}) {
+    setState(() {
+      _isVolumeSliderShown = show;
+    });
+  }
+
+  void onChangeVolumeSlider(double value) {
+    _viewPlayerController.setVolume(value);
+    setState(() {
+      _isVolumeEnabled = value != 0.0;
+      _currentSliderValue = value;
+    });
+  }
+
+  void switchVolumeSliderDisplay(bool show) {
     setState(() {
       _isVolumeSliderShown = show;
     });

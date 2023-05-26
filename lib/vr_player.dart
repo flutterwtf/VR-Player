@@ -47,7 +47,7 @@ class VrPlayerController {
   /// Set player volume from 0 to 1
   Future<void> setVolume(double volume) async {
     try {
-      return _channel.invokeMethod<void>('setVolume', {'volume': volume});
+      return _channel.invokeMethod('setVolume', {'volume': volume});
     } on PlatformException catch (e) {
       if (kDebugMode) {
         print('${e.code}: ${e.message}');
