@@ -47,7 +47,7 @@ VrPlayer(
   height: playerHeight,
 ),
 ```
-You must implement `onViewPlayerCreated` to receive player events.
+You should implement `onViewPlayerCreated` to receive player events.
 
 ```dart
 void onViewPlayerCreated(
@@ -69,7 +69,7 @@ void onViewPlayerCreated(
 
 ### VrPlayerController
 
-The `VrPlayerController` can be used to change the state of a `VrPlayer`  Note that the methods can only be used after the `VrPlayer` has been created.
+The `VrPlayerController` can be used to change the state of a `VrPlayer`. Note that the methods can only be used after the `VrPlayer` has been created.
 
  Method | Description 
 --- | ---
