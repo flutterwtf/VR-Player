@@ -1,12 +1,6 @@
 name: Package CI/CD
 
-on:
-  push:
-    paths:
-      - '!example/**'
-  pull_request:
-    paths:
-      - '!example/**'
+on: [push, pull_request]
 
 jobs:
   build:
