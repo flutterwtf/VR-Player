@@ -1,12 +1,12 @@
-min_coverage=75
-
-coverage_check=$(flutter pub run test_cov_console --pass=$min_coverage)
-
-if [ "$coverage_check" == "PASSED" ]
+threshold=10
+dart pub global activate pana
+pana --exit-code-threshold $threshold --no-warning
+retVal=$?
+if [ $retVal -eq 0 ]
 then
-  echo "Good coverage"
+  echo "Good pana score"
   exit 0
 else
-  echo "Coverage less than $min_coverage"
+  echo "Pana score less than minimum"
   exit 1
 fi

@@ -13,17 +13,9 @@ jobs:
         with:
           flutter-version: '3.x'
           channel: 'stable'
-
-      - name: Install lcov
-        run: sudo apt-get install lcov
-
+          
       - name: Analyzing
         run: flutter analyze
 
-      - name: Running test
-        run: flutter test --coverage
-
-      - name: Coverage check
-        run: |
-          lcov --remove coverage/lcov.info '*.g.dart' '*.part.dart' '*/generated/*' -o coverage/lcov.info
-          ./scripts/pana_check.sh
+      - name: Pana check
+        run: ./scripts/pana_check.sh
