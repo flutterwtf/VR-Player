@@ -18,8 +18,8 @@
   <a href="https://pub.dev/packages/vr_player">
     <img alt="Pub" src="https://img.shields.io/pub/v/vr_player" />
   </a>
-  <a href="https://github.com/What-the-Flutter/Vr-Player/actions/workflows/build.yml?query=workflow%3ABuild">
-    <img alt="Build Status" src="https://github.com/What-the-Flutter/Vr-Player/actions/workflows/build.yml/badge.svg?event=push"/>
+  <a href="https://github.com/What-the-Flutter/Vr-Player/actions/workflows/analyze.yml">
+    <img alt="Build Status" src="https://github.com/What-the-Flutter/Vr-Player/actions/workflows/analyze.yml/badge.svg"/>
   </a>
   <a href="https://www.codefactor.io/repository/github/what-the-flutter/vr-player">
     <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/what-the-flutter/vr-player/badge"/>
@@ -27,7 +27,6 @@
 </p>
 
 ---
-
 
 ## Getting Started
 

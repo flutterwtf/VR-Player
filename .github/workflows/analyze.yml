@@ -1,0 +1,21 @@
+name: VR Player CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: subosito/flutter-action@v2
+        with: 
+          flutter-version: '3.x'
+          channel: 'stable'
+
+      - name: Analyzing
+        run: flutter analyze
+
+      - name: Pana check
+        run: ./scripts/pana_check.sh 
