@@ -44,7 +44,7 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
     private let flutterChannels: [KalturaFlutterEventChannel]
     
     init(frame: CGRect, viewId: Int64, arguments: [String: Any]?, messenger: FlutterBinaryMessenger) {
-        self.viewId = viewId;
+        self.viewId = viewId
         self.args = arguments
         
         self.channel = FlutterMethodChannel(
