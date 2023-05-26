@@ -2,11 +2,9 @@ name: Example CI/CD
 
 on:
   push:
-    branches: [ "master" ]
     paths:
       - 'example/**'
   pull_request:
-    branches: [ "master" ]
     paths:
       - 'example/**'
 
