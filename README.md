@@ -1,6 +1,32 @@
 # VrPlayer
 
-VR Player Plugin for Flutter
+<p align="center">
+  <a href="https://flutter.wtf/">
+    <img alt="What the Flutter" src="https://static.tildacdn.com/tild6330-3461-4139-a163-666435336663/Group_13.svg" height=140/>
+  </a>
+</p>
+
+<p align="center">
+  <h3 align="center">Crafted with passion by
+    <a href="https://flutter.wtf/">
+    What the Flutter
+    </a> 🦜
+  </h3>
+</p>
+
+<p align="center">
+  <a href="https://pub.dev/packages/vr_player">
+    <img alt="Pub" src="https://img.shields.io/pub/v/vr_player" />
+  </a>
+  <a href="https://github.com/What-the-Flutter/Vr-Player/actions/workflows/analyze.yml?query=workflow%3ABuild">
+    <img alt="Build Status" src="https://github.com/What-the-Flutter/Vr-Player/actions/workflows/analyze.yml/badge.svg?event=push"/>
+  </a>
+  <a href="https://www.codefactor.io/repository/github/what-the-flutter/vr-player">
+    <img alt="CodeFactor" src="https://www.codefactor.io/repository/github/what-the-flutter/vr-player/badge"/>
+  </a>
+</p>
+
+---
 
 ## Getting Started
 
