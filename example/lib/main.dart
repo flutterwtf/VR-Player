@@ -360,20 +360,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     });
   }
 
-  void onChangeVolumeSlider(double value) {
-    _viewPlayerController.setVolume(value);
-    setState(() {
-      _isVolumeEnabled = value != 0.0;
-      _currentSliderValue = value;
-    });
-  }
-
-  void switchVolumeSliderDisplay(bool show) {
-    setState(() {
-      _isVolumeSliderShown = show;
-    });
-  }
-
   String millisecondsToDateTime(int milliseconds) =>
       setDurationText(Duration(milliseconds: milliseconds));
 
