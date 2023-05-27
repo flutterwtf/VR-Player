@@ -14,15 +14,6 @@ part 'vr_player_observer.dart';
 part 'vr_state.dart';
 
 class VrPlayer extends StatefulWidget {
-  const VrPlayer({
-    required this.onCreated,
-    required this.x,
-    required this.y,
-    required this.width,
-    required this.height,
-    Key? key,
-  }) : super(key: key);
-
   final VrPlayerCreatedCallback onCreated;
   final double x;
   final double y;
@@ -31,6 +22,15 @@ class VrPlayer extends StatefulWidget {
   /// https://developers.google.com/vr/discover/360-degree-media
   final double width;
   final double height;
+
+  const VrPlayer({
+    required this.onCreated,
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
@@ -105,8 +105,9 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
                 return AndroidViewSurface(
                   controller: controller as AndroidViewController,
                   hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-                    Factory(() => TapGestureRecognizer()),
+                  gestureRecognizers: const <Factory<
+                      OneSequenceGestureRecognizer>>{
+                    Factory(TapGestureRecognizer.new),
                   },
                 );
               },

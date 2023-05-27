@@ -1,11 +1,11 @@
 part of 'vr_player.dart';
 
 class VrPlayerController {
+  late MethodChannel _channel;
+
   VrPlayerController.init(int id) {
     _channel = MethodChannel('vr_player_$id');
   }
-
-  late MethodChannel _channel;
 
   /// Initializes video based on configuration.
   /// Invoke actions which need to be run on player start.
@@ -18,7 +18,7 @@ class VrPlayerController {
     );
 
     final params = {'videoUrl': videoUrl, 'videoPath': videoPath};
-    return _channel.invokeMethod('loadVideo', params);
+    await _channel.invokeMethod('loadVideo', params);
   }
 
   /// Check current player state
@@ -39,7 +39,7 @@ class VrPlayerController {
   /// Set player volume from 0 to 1
   Future<void> setVolume(double volume) async {
     try {
-      return _channel.invokeMethod('setVolume', {'volume': volume});
+      await _channel.invokeMethod('setVolume', {'volume': volume});
     } on PlatformException catch (e) {
       if (kDebugMode) {
         print('${e.code}: ${e.message}');

@@ -2,6 +2,28 @@ part of 'vr_player.dart';
 
 /// [VrPlayerObserver] is required for listening to player notifications
 class VrPlayerObserver {
+  /// Used to receive player events
+  ValueChanged<VrState>? onStateChange;
+
+  /// Used to receive video duration in millis
+  ValueChanged<int>? onDurationChange;
+
+  /// Used to receive current video position in millis
+  ValueChanged<int>? onPositionChange;
+
+  /// Invokes when video is ended
+  ValueChanged<bool>? onFinishedChange;
+
+  late EventChannel _eventChannelState;
+  late EventChannel _eventChannelDuration;
+  late EventChannel _eventChannelPosition;
+  late EventChannel _eventChannelEnded;
+
+  late StreamSubscription _stateSubscription;
+  late StreamSubscription _positionSubscription;
+  late StreamSubscription _durationSubscription;
+  late StreamSubscription _endedSubscription;
+
   /// Init Stream Subscriptions to receive player events
   VrPlayerObserver.init(int id) {
     _eventChannelState = EventChannel('vr_player_events_${id}_state');
@@ -32,28 +54,6 @@ class VrPlayerObserver {
       onFinishedChange?.call(event['ended'] ?? false);
     });
   }
-
-  late EventChannel _eventChannelState;
-  late EventChannel _eventChannelDuration;
-  late EventChannel _eventChannelPosition;
-  late EventChannel _eventChannelEnded;
-
-  late StreamSubscription _stateSubscription;
-  late StreamSubscription _positionSubscription;
-  late StreamSubscription _durationSubscription;
-  late StreamSubscription _endedSubscription;
-
-  /// Used to receive player events
-  ValueChanged<VrState>? onStateChange;
-
-  /// Used to receive video duration in millis
-  ValueChanged<int>? onDurationChange;
-
-  /// Used to receive current video position in millis
-  ValueChanged<int>? onPositionChange;
-
-  /// Invokes when video is ended
-  ValueChanged<bool>? onFinishedChange;
 
   /// Used to stop listening for updates
   void cancelListeners() {

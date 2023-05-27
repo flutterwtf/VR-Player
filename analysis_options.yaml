@@ -15,6 +15,7 @@ analyzer:
     missing_return: error
     # remove line below to enable doc lints
     public_member_api_docs: ignore
+    sort_constructors_first: ignore
 
   exclude:
     - "build/**"
@@ -44,9 +45,6 @@ dart_code_metrics:
         acceptable-level: 2
     - format-comment: false
     - prefer-static-class: false
-    - member-ordering: false
-    - prefer-match-file-name: false
-    - avoid-redundant-async: false
     - no-magic-number: false
 
   metrcis:
