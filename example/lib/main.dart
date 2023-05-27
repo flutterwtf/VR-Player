@@ -5,7 +5,7 @@ import 'package:vr_player/vr_player.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class VideoPlayerPage extends StatefulWidget {
-  const VideoPlayerPage({Key? key}) : super(key: key);
+  const VideoPlayerPage({super.key});
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
