@@ -195,8 +195,8 @@ class VrPlayer extends StatefulWidget {
     required this.y,
     required this.width,
     required this.height,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
@@ -274,8 +274,8 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
         surfaceFactory: (context, controller) {
           return AndroidViewSurface(
             controller: controller as AndroidViewController,
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-              Factory(() => TapGestureRecognizer())
+            gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{
+              Factory(TapGestureRecognizer.new)
             },
             hitTestBehavior: PlatformViewHitTestBehavior.opaque,
           );
