@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+// ignore: prefer-match-file-name
 class VrPlayerController {
   VrPlayerController.init(int id) {
     _channel = MethodChannel('vr_player_$id');
@@ -115,28 +116,28 @@ class VrPlayerObserver {
   /// Init Stream Subscriptions to receive player events
   VrPlayerObserver.init(int id) {
     _eventChannelState = EventChannel('vr_player_events_${id}_state');
-    _stateStreamSubscription =
+    _stateSubscription =
         _eventChannelState.receiveBroadcastStream().listen((event) {
       // ignore: avoid_dynamic_calls
       onStateChange?.call(VrState.values[event['state']]);
     });
 
     _eventChannelDuration = EventChannel('vr_player_events_${id}_duration');
-    _durationStreamSubscription =
+    _durationSubscription =
         _eventChannelDuration.receiveBroadcastStream().listen((event) {
       // ignore: avoid_dynamic_calls
       onDurationChange?.call(event['duration']);
     });
 
     _eventChannelPosition = EventChannel('vr_player_events_${id}_position');
-    _positionStreamSubscription =
+    _positionSubscription =
         _eventChannelPosition.receiveBroadcastStream().listen((event) {
       // ignore: avoid_dynamic_calls
       onPositionChange?.call(event['currentPosition']);
     });
 
     _eventChannelEnded = EventChannel('vr_player_events_${id}_ended');
-    _endedStreamSubscription =
+    _endedSubscription =
         _eventChannelEnded.receiveBroadcastStream().listen((event) {
       // ignore: avoid_dynamic_calls
       onFinishedChange?.call(event['ended'] ?? false);
@@ -148,10 +149,10 @@ class VrPlayerObserver {
   late EventChannel _eventChannelPosition;
   late EventChannel _eventChannelEnded;
 
-  late StreamSubscription _stateStreamSubscription;
-  late StreamSubscription _positionStreamSubscription;
-  late StreamSubscription _durationStreamSubscription;
-  late StreamSubscription _endedStreamSubscription;
+  late StreamSubscription _stateSubscription;
+  late StreamSubscription _positionSubscription;
+  late StreamSubscription _durationSubscription;
+  late StreamSubscription _endedSubscription;
 
   /// Used to receive player events
   ValueChanged<VrState>? onStateChange;
@@ -167,10 +168,10 @@ class VrPlayerObserver {
 
   /// Used to stop listening for updates
   void cancelListeners() {
-    _stateStreamSubscription.cancel();
-    _durationStreamSubscription.cancel();
-    _positionStreamSubscription.cancel();
-    _endedStreamSubscription.cancel();
+    _stateSubscription.cancel();
+    _durationSubscription.cancel();
+    _positionSubscription.cancel();
+    _endedSubscription.cancel();
   }
 }
 
@@ -259,61 +260,54 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    const viewType = 'plugins.vr_player/player_view';
+
     return Container(
+      color: Colors.black,
       width: widget.width,
       height: widget.height,
-      color: Colors.black,
-      child: _nativeView(),
+      child: Platform.isAndroid
+          ? PlatformViewLink(
+              surfaceFactory: (context, controller) {
+                return AndroidViewSurface(
+                  controller: controller as AndroidViewController,
+                  hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                    Factory(() => TapGestureRecognizer()),
+                  },
+                );
+              },
+              onCreatePlatformView: (params) {
+                return PlatformViewsService.initExpensiveAndroidView(
+                  id: params.id,
+                  creationParams: {},
+                  creationParamsCodec: const StandardMessageCodec(),
+                  layoutDirection: TextDirection.ltr,
+                  viewType: viewType,
+                )
+                  ..addOnPlatformViewCreatedListener(
+                    params.onPlatformViewCreated,
+                  )
+                  ..addOnPlatformViewCreatedListener(onPlatformViewCreated)
+                  ..create(size: Size(widget.width, widget.height));
+              },
+              viewType: viewType,
+            )
+          : UiKitView(
+              viewType: viewType,
+              onPlatformViewCreated: onPlatformViewCreated,
+              creationParams: <String, dynamic>{
+                'x': widget.x,
+                'y': widget.y,
+                'width': widget.width,
+                'height': widget.height,
+              },
+              creationParamsCodec: const StandardMessageCodec(),
+            ),
     );
   }
 
-  Widget _nativeView() {
-    const viewType = 'plugins.vr_player/player_view';
-    if (Platform.isAndroid) {
-      return PlatformViewLink(
-        surfaceFactory: (context, controller) {
-          return AndroidViewSurface(
-            controller: controller as AndroidViewController,
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
-              Factory(() => TapGestureRecognizer())
-            },
-            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-          );
-        },
-        onCreatePlatformView: (params) {
-          final AndroidViewController controller =
-              PlatformViewsService.initExpensiveAndroidView(
-            id: params.id,
-            creationParams: {},
-            creationParamsCodec: const StandardMessageCodec(),
-            layoutDirection: TextDirection.ltr,
-            viewType: viewType,
-          )
-                ..addOnPlatformViewCreatedListener(
-                  params.onPlatformViewCreated,
-                )
-                ..addOnPlatformViewCreatedListener(onPlatformViewCreated)
-                ..create(size: Size(widget.width, widget.height));
-          return controller;
-        },
-        viewType: viewType,
-      );
-    } else {
-      return UiKitView(
-        viewType: viewType,
-        onPlatformViewCreated: onPlatformViewCreated,
-        creationParams: <String, dynamic>{
-          'x': widget.x,
-          'y': widget.y,
-          'width': widget.width,
-          'height': widget.height,
-        },
-        creationParamsCodec: const StandardMessageCodec(),
-      );
-    }
-  }
-
-  Future<void> onPlatformViewCreated(int id) async {
+  void onPlatformViewCreated(int id) {
     _videoPlayerController = VrPlayerController.init(id);
     _playerObserver = VrPlayerObserver.init(id);
     widget.onCreated(_videoPlayerController, _playerObserver);
