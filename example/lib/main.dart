@@ -106,16 +106,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   @override
   Widget build(BuildContext context) {
-    const double trackHeight = 5;
-    const double height = 180;
-    const double right = 4;
-    const overlayColorAlpha = 32;
-    const quarterTurns = 3;
-    const divisions = 10;
-
     _playerWidth = MediaQuery.of(context).size.width;
     _playerHeight =
-        // ignore: no-magic-number
         _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2;
     _isLandscapeOrientation =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -166,13 +158,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                           data: SliderTheme.of(context).copyWith(
                             activeTrackColor: Colors.amberAccent,
                             inactiveTrackColor: Colors.grey,
-                            trackHeight: trackHeight,
+                            trackHeight: 5,
                             thumbColor: Colors.white,
                             thumbShape: const RoundSliderThumbShape(
                               enabledThumbRadius: 8,
                             ),
                             overlayColor:
-                                Colors.purple.withAlpha(overlayColorAlpha),
+                                Colors.purple.withAlpha(32),
                             overlayShape: const RoundSliderOverlayShape(
                               overlayRadius: 14,
                             ),
@@ -229,16 +221,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
               ),
             ),
             Positioned(
-              height: height,
-              right: right,
-              // ignore: no-magic-number
+              height: 180,
+              right: 4,
               top: MediaQuery.of(context).size.height / 4,
               child: _isVolumeSliderShown
                   ? RotatedBox(
-                      quarterTurns: quarterTurns,
+                      quarterTurns: 3,
                       child: Slider(
                         value: _currentSliderValue,
-                        divisions: divisions,
+                        divisions: 10,
                         onChanged: onChangeVolumeSlider,
                       ),
                     )
@@ -375,8 +366,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   String setDurationText(Duration duration) {
     String twoDigits(int n) {
-      const maxDigit = 9;
-      if (n >= maxDigit) return '$n';
+      if (n >= 10) return '$n';
       return '0$n';
     }
 

@@ -47,9 +47,8 @@ dart_code_metrics:
     - member-ordering: false
     - prefer-match-file-name: false
     - avoid-redundant-async: false
-    - no-magic-number:
-        exclude:
-          - test/**
+    - no-magic-number: false
+
   metrcis:
     - cyclomatic-complexity: 10
     - maximum-nesting-level: 5
