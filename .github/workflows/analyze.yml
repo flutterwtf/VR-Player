@@ -21,4 +21,3 @@ jobs:
 
       - name: Pana check
         run: ./scripts/pana_check.sh 
-        
