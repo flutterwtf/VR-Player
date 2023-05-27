@@ -15,7 +15,9 @@ jobs:
           channel: 'stable'
 
       - name: Analyzing
-        run: flutter analyze
+        run: |
+          flutter analyze
+          dart run dart_code_metrics:metrics analyze lib example/lib 
 
       - name: Pana check
         run: ./scripts/pana_check.sh 
