@@ -9,11 +9,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class VrPlayerController {
-  late MethodChannel _channel;
-
   VrPlayerController.init(int id) {
     _channel = MethodChannel('vr_player_$id');
   }
+
+  late MethodChannel _channel;
 
   /// Initializes video based on configuration.
   /// Invoke actions which need to be run on player start.
@@ -112,28 +112,6 @@ enum VrState {
 
 /// [VrPlayerObserver] is required for listening to player notifications
 class VrPlayerObserver {
-  late EventChannel _eventChannelState;
-  late EventChannel _eventChannelDuration;
-  late EventChannel _eventChannelPosition;
-  late EventChannel _eventChannelEnded;
-
-  late StreamSubscription _stateStreamSubscription;
-  late StreamSubscription _positionStreamSubscription;
-  late StreamSubscription _durationStreamSubscription;
-  late StreamSubscription _endedStreamSubscription;
-
-  /// Used to receive player events
-  ValueChanged<VrState>? onStateChange;
-
-  /// Used to receive video duration in millis
-  ValueChanged<int>? onDurationChange;
-
-  /// Used to receive current video position in millis
-  ValueChanged<int>? onPositionChange;
-
-  /// Invokes when video is ended
-  ValueChanged<bool>? onFinishedChange;
-
   /// Init Stream Subscriptions to receive player events
   VrPlayerObserver.init(int id) {
     _eventChannelState = EventChannel('vr_player_events_${id}_state');
@@ -165,6 +143,28 @@ class VrPlayerObserver {
     });
   }
 
+  late EventChannel _eventChannelState;
+  late EventChannel _eventChannelDuration;
+  late EventChannel _eventChannelPosition;
+  late EventChannel _eventChannelEnded;
+
+  late StreamSubscription _stateStreamSubscription;
+  late StreamSubscription _positionStreamSubscription;
+  late StreamSubscription _durationStreamSubscription;
+  late StreamSubscription _endedStreamSubscription;
+
+  /// Used to receive player events
+  ValueChanged<VrState>? onStateChange;
+
+  /// Used to receive video duration in millis
+  ValueChanged<int>? onDurationChange;
+
+  /// Used to receive current video position in millis
+  ValueChanged<int>? onPositionChange;
+
+  /// Invokes when video is ended
+  ValueChanged<bool>? onFinishedChange;
+
   /// Used to stop listening for updates
   void cancelListeners() {
     _stateStreamSubscription.cancel();
@@ -180,15 +180,6 @@ typedef VrPlayerCreatedCallback = void Function(
 );
 
 class VrPlayer extends StatefulWidget {
-  final VrPlayerCreatedCallback onCreated;
-  final double x;
-  final double y;
-
-  /// Make sure that the best aspect ratio is 2:1
-  /// https://developers.google.com/vr/discover/360-degree-media
-  final double width;
-  final double height;
-
   const VrPlayer({
     required this.onCreated,
     required this.x,
@@ -197,6 +188,15 @@ class VrPlayer extends StatefulWidget {
     required this.height,
     Key? key,
   }) : super(key: key);
+
+  final VrPlayerCreatedCallback onCreated;
+  final double x;
+  final double y;
+
+  /// Make sure that the best aspect ratio is 2:1
+  /// https://developers.google.com/vr/discover/360-degree-media
+  final double width;
+  final double height;
 
   @override
   State<StatefulWidget> createState() => _VideoPlayerState();
