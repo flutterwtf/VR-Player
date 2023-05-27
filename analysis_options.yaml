@@ -15,26 +15,14 @@ analyzer:
     missing_return: error
     # remove line below to enable doc lints
     public_member_api_docs: ignore
-    sort_pub_dependencies: ignore
-    unawaited_futures: ignore
-    sort_constructors_first: ignore
-    mixin_inherits_from_not_object: ignore
 
   exclude:
     - "build/**"
-    - "**/*.g.dart"
-    - "**/*.gr.dart"
-    - "**/*.freezed.dart"
-    - "**/*.config.dart"
 
 dart_code_metrics:
   extends:
     - package:dart_code_metrics_presets/all.yaml
   rules:
-    - prefer-moving-to-variable:
-        allowed-duplicated-chains: 3
-    - arguments-ordering: false
-    - avoid-banned-imports: false
     - avoid-missing-enum-constant-in-map: false
     - avoid-non-null-assertion: false
     - avoid-top-level-members-in-tests: false
@@ -63,8 +51,3 @@ dart_code_metrics:
     - cyclomatic-complexity: 10
     - maximum-nesting-level: 5
     - source-lines-of-code: 50
-
-
-linter:
-  rules:
-    library_private_types_in_public_api: false
