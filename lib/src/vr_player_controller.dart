@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:vr_player/src/vr_player.dart';
 
 class VrPlayerController {
   late MethodChannel _channel;
