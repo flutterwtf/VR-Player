@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -7,11 +6,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-
-part 'vr_player_controller.dart';
-part 'vr_player_created_callback.dart';
-part 'vr_player_observer.dart';
-part 'vr_state.dart';
+import 'package:vr_player/src/vr_player_controller.dart';
+import 'package:vr_player/src/vr_player_created_callback.dart';
+import 'package:vr_player/src/vr_player_observer.dart';
 
 class VrPlayer extends StatefulWidget {
   final VrPlayerCreatedCallback onCreated;
