@@ -1,4 +1,8 @@
-part of 'vr_player.dart';
+import 'dart:async';
+import 'dart:collection';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 class VrPlayerController {
   late MethodChannel _channel;

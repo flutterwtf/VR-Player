@@ -1,4 +1,7 @@
-part of 'vr_player.dart';
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+import 'package:vr_player/src/vr_state.dart';
 
 /// [VrPlayerObserver] is required for listening to player notifications
 class VrPlayerObserver {

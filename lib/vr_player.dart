@@ -7,3 +7,7 @@
 library vr_player;
 
 export 'src/vr_player.dart';
+export 'src/vr_player_controller.dart';
+export 'src/vr_player_created_callback.dart';
+export 'src/vr_player_observer.dart';
+export 'src/vr_state.dart';
