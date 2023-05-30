@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vr_player/vr_player.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -17,7 +19,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: Center(
           child: HomePage(),
@@ -28,6 +30,8 @@ class _MyAppState extends State<MyApp> {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -37,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: buttonOnPressed,
-      child: Text("Start Video"),
+      child: const Text('Start Video'),
     );
   }
 
@@ -45,13 +49,15 @@ class _HomePageState extends State<HomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(),
+        builder: (context) => const VideoPlayerPage(),
       ),
     );
   }
 }
 
 class VideoPlayerPage extends StatefulWidget {
+  const VideoPlayerPage({super.key});
+
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
 }
@@ -75,20 +81,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   bool isVideoLoading = false;
   bool isVideoReady = false;
   String? _currentPosition;
-  double? _seekPosition = 0.0;
   double _currentSliderValue = 0.1;
+  double _seekPosition = 0;
 
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
-    _animation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
     _toggleShowingBar();
     super.initState();
   }
 
   void _toggleShowingBar() {
-    switchVolumeSliderDisplay(false);
+    switchVolumeSliderDisplay(show: false);
 
     _isShowingBar = !_isShowingBar;
     if (_isShowingBar) {
@@ -102,16 +108,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   Widget build(BuildContext context) {
     _playerWidth = MediaQuery.of(context).size.width;
     _playerHeight =
-        _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2.0;
+        _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2;
     _isLandscapeOrientation =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("VR Player"),
+        title: const Text('VR Player'),
       ),
       body: GestureDetector(
-        onTap: () => _toggleShowingBar(),
+        onTap: _toggleShowingBar,
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
@@ -128,13 +134,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
               right: 0,
               child: FadeTransition(
                 opacity: _animation,
-                child: Container(
+                child: ColoredBox(
                   color: Colors.black,
                   child: Row(
                     children: <Widget>[
                       IconButton(
                         icon: Icon(
-                          this._isVideoFinished
+                          _isVideoFinished
                               ? Icons.replay
                               : _isPlaying
                                   ? Icons.pause
@@ -145,24 +151,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                       ),
                       Text(
                         _currentPosition?.toString() ?? '00:00',
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       Expanded(
                         child: SliderTheme(
                           data: SliderTheme.of(context).copyWith(
                             activeTrackColor: Colors.amberAccent,
                             inactiveTrackColor: Colors.grey,
-                            trackHeight: 5.0,
+                            trackHeight: 5,
                             thumbColor: Colors.white,
-                            thumbShape:
-                                RoundSliderThumbShape(enabledThumbRadius: 8.0),
-                            overlayColor: Colors.purple.withAlpha(32),
-                            overlayShape:
-                                RoundSliderOverlayShape(overlayRadius: 14.0),
+                            thumbShape: const RoundSliderThumbShape(
+                              enabledThumbRadius: 8,
+                            ),
+                            overlayColor:
+                                Colors.purple.withAlpha(32),
+                            overlayShape: const RoundSliderOverlayShape(
+                              overlayRadius: 14,
+                            ),
                           ),
                           child: Slider(
-                            value: _seekPosition!,
-                            max: _intDuration?.toDouble() ?? 0.0,
+                            value: _seekPosition,
+                            max: _intDuration?.toDouble() ?? 0,
                             onChangeEnd: (value) {
                               _viewPlayerController.seekTo(value.toInt());
                             },
@@ -174,7 +183,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                       ),
                       Text(
                         _duration?.toString() ?? '99:99',
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       if (_isFullScreen || _isLandscapeOrientation)
                         IconButton(
@@ -184,7 +193,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                                 : Icons.volume_off_rounded,
                             color: Colors.white,
                           ),
-                          onPressed: () => switchVolumeSliderDisplay(true),
+                          onPressed: () =>
+                              switchVolumeSliderDisplay(show: true),
                         ),
                       IconButton(
                         icon: Icon(
@@ -195,23 +205,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                         ),
                         onPressed: fullScreenPressed,
                       ),
-                      _isFullScreen
-                          ? IconButton(
-                              icon: Image.asset(
-                                'assets/icons/cardboard.png',
-                                color: Colors.white,
-                              ),
-                              onPressed: cardBoardPressed,
-                            )
-                          : Container(),
+                      if (_isFullScreen)
+                        IconButton(
+                          icon: Image.asset(
+                            'assets/icons/cardboard.png',
+                            color: Colors.white,
+                          ),
+                          onPressed: cardBoardPressed,
+                        )
+                      else
+                        Container(),
                     ],
                   ),
                 ),
               ),
             ),
             Positioned(
-              height: 180.0,
-              right: 4.0,
+              height: 180,
+              right: 4,
               top: MediaQuery.of(context).size.height / 4,
               child: _isVolumeSliderShown
                   ? RotatedBox(
@@ -222,7 +233,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                         onChanged: onChangeVolumeSlider,
                       ),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ),
           ],
         ),
@@ -231,11 +242,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   }
 
   void cardBoardPressed() {
-    this._viewPlayerController.toggleVRMode();
+    _viewPlayerController.toggleVRMode();
   }
 
-  void fullScreenPressed() async {
-    await this._viewPlayerController.fullScreen();
+  Future<void> fullScreenPressed() async {
+    await _viewPlayerController.fullScreen();
     setState(() {
       _isFullScreen = !_isFullScreen;
     });
@@ -263,8 +274,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     }
   }
 
-  void playAndPause() async {
-    if (this._isVideoFinished) {
+  Future<void> playAndPause() async {
+    if (_isVideoFinished) {
       await _viewPlayerController.seekTo(0);
     }
 
@@ -276,7 +287,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
     setState(() {
       _isPlaying = !_isPlaying;
-      this._isVideoFinished = false;
+      _isVideoFinished = false;
     });
   }
 
@@ -284,28 +295,29 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     VrPlayerController controller,
     VrPlayerObserver observer,
   ) {
-    this._viewPlayerController = controller;
-    observer.handleStateChange(this.onReceiveState);
-    observer.handleDurationChange(this.onReceiveDuration);
-    observer.handlePositionChange(this.onChangePosition);
-    observer.handleFinishedChange(this.onReceiveEnded);
-    this._viewPlayerController.loadVideo(
-          videoUrl:
-              "https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8",
-        );
+    _viewPlayerController = controller;
+    observer
+      ..onStateChange = onReceiveState
+      ..onDurationChange = onReceiveDuration
+      ..onPositionChange = onChangePosition
+      ..onFinishedChange = onReceiveEnded;
+    _viewPlayerController.loadVideo(
+      videoUrl:
+          'https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8',
+    );
   }
 
   void onReceiveState(VrState state) {
     switch (state) {
       case VrState.loading:
         setState(() {
-          this.isVideoLoading = true;
+          isVideoLoading = true;
         });
         break;
       case VrState.ready:
         setState(() {
-          this.isVideoLoading = false;
-          this.isVideoReady = true;
+          isVideoLoading = false;
+          isVideoReady = true;
         });
         break;
       case VrState.buffering:
@@ -317,32 +329,33 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   void onReceiveDuration(int millis) {
     setState(() {
       _intDuration = millis;
-      this._duration = millisecondsToDateTime(millis);
+      _duration = millisecondsToDateTime(millis);
     });
   }
 
   void onChangePosition(int millis) {
     setState(() {
-      this._currentPosition = millisecondsToDateTime(millis);
+      _currentPosition = millisecondsToDateTime(millis);
       _seekPosition = millis.toDouble();
     });
   }
 
+  // ignore: avoid_positional_boolean_parameters
   void onReceiveEnded(bool isFinished) {
     setState(() {
-      this._isVideoFinished = isFinished;
+      _isVideoFinished = isFinished;
     });
   }
 
   void onChangeVolumeSlider(double value) {
     _viewPlayerController.setVolume(value);
     setState(() {
-      _isVolumeEnabled = value != 0.0;
+      _isVolumeEnabled = value != 0;
       _currentSliderValue = value;
     });
   }
 
-  void switchVolumeSliderDisplay(bool show) {
+  void switchVolumeSliderDisplay({required bool show}) {
     setState(() {
       _isVolumeSliderShown = show;
     });
@@ -353,12 +366,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   String setDurationText(Duration duration) {
     String twoDigits(int n) {
-      if (n >= 10) return "$n";
-      return "0$n";
+      if (n >= 10) return '$n';
+      return '0$n';
     }
 
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+    final twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    final twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return '${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds';
   }
 }

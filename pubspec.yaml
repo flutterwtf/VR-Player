@@ -1,19 +1,21 @@
 name: vr_player
 description: The `VrPlayer` lets you play 360° and VR videos smoothly on Android and iOS platforms
-version: 0.1.5
+version: 0.2.0
 homepage: "https://github.com/What-the-Flutter/VR-Player"
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.10.0"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  dart_code_metrics: ^5.7.4
   flutter_test:
     sdk: flutter
+  very_good_analysis: ^5.0.0+1
 
 flutter:
   plugin:
