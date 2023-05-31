@@ -19,7 +19,7 @@ jobs:
 
       - name: Dart Code Metrics
         run: dart run dart_code_metrics:metrics analyze lib example/lib
-
+        
       - name: Pana check
         run: |
           dart pub global activate pana
