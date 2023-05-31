@@ -14,11 +14,13 @@ jobs:
           flutter-version: '3.x'
           channel: 'stable'
 
-      - name: Analyzing
-        run: |
-          flutter analyze
-          dart run dart_code_metrics:metrics analyze lib example/lib
+      - name: Analyze
+        run: flutter analyze
 
+      - name: Dart Code Metrics
+        run: dart run dart_code_metrics:metrics analyze lib example/lib
+        
       - name: Pana check
-        run: ./scripts/pana_check.sh
-
+        run: |
+          dart pub global activate pana
+          pana --no-warning --exit-code-threshold 10
