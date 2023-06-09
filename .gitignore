@@ -1,4 +1,18 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
 
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
 .idea/
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -6,8 +20,9 @@
 # is commented out by default.
 .vscode/
 
-*.iml
-.DS_Store
+# Flutter/Dart/Pub related
+/pubspec.lock
+**/doc/api/
 .dart_tool/
 .packages
-pubspec.lock
+build/
