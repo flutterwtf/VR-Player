@@ -85,6 +85,15 @@ The `VrPlayerController` can be used to change the state of a `VrPlayer`. Note t
 `onResume()` | *(Android only)* Reload player.
 `onOrientationChanged()` | *(Android only)* Notily player when orientation changed.
 
+### Local Files Guide *(Android only)*
+
+Working with video from storage is a bit difficult than from the Internet. Follow the instructions bellow to launch local files correctly.
+
+1. Add permission to read external storage to the file `AndroidmManifest.xml`.
+2. Request permission to read external storage from user.
+3. Call `loadVideo()` with correct `videoPath`.
+
+
 ## License Information  
 
 All code in this project is released under the [AGPLv3 license](https://www.gnu.org/licenses/agpl-3.0.html) unless a different license for a particular library is specified in the applicable library path.   
