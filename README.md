@@ -89,7 +89,7 @@ The `VrPlayerController` can be used to change the state of a `VrPlayer`. Note t
 
 Working with video from storage is a bit difficult than from the Internet. Follow the instructions bellow to launch local files correctly.
 
-1. Add permission to read external storage to the file `AndroidmManifest.xml`.
+1. Add `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>` to the file `AndroidmManifest.xml`.
 2. Request permission to read external storage from user.
 3. Call `loadVideo()` with correct `videoPath`.
 
