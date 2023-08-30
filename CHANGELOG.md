@@ -1,3 +1,7 @@
+## 0.2.1
+- Fix issue [#10](https://github.com/What-the-Flutter/VR-Player/issues/10)
+- Readme changes
+
 ## 0.2.0
 - Update package to Flutter 3.10.
 - Dart 3 support
