@@ -317,9 +317,7 @@ class VideoPlayerController(
         val vrSettings = VRSettings()
         vrSettings.isFlingEnabled = true
         vrSettings.isVrModeEnabled = false
-
-        if (isVRModeEnabled) vrSettings.interactionMode = VRInteractionMode.MotionWithTouch
-            else vrSettings.interactionMode = VRInteractionMode.Touch
+        vrSettings.interactionMode = VRInteractionMode.MotionWithTouch
 
         vrSettings.isZoomWithPinchEnabled = true
         return vrSettings

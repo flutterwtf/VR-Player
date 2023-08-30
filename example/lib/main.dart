@@ -163,8 +163,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                             thumbShape: const RoundSliderThumbShape(
                               enabledThumbRadius: 8,
                             ),
-                            overlayColor:
-                                Colors.purple.withAlpha(32),
+                            overlayColor: Colors.purple.withAlpha(32),
                             overlayShape: const RoundSliderOverlayShape(
                               overlayRadius: 14,
                             ),
