@@ -230,11 +230,15 @@ class VideoPlayerController(
         // In our case it will be hls
         // in case of mpd/wvm formats you have to to call mediaSource.setDrmData method as well
         if (videoUrl.get("videoPath") != null){
-            mediaSource.url = videoUrl.get("videoPath") as String
-            mediaSource.mediaFormat = PKMediaFormat.mp4
+            val url = videoUrl.get("videoPath") as String
+            val extension = url.substringAfterLast('.', "");
+            mediaSource.url = url
+            mediaSource.mediaFormat = if(extension=="mp4") PKMediaFormat.mp4 else PKMediaFormat.hls
         } else {
-            mediaSource.url = videoUrl.get("videoUrl") as String
-            mediaSource.mediaFormat = PKMediaFormat.hls
+            val url = videoUrl.get("videoUrl") as String
+            val extension = url.substringAfterLast('.', "");
+            mediaSource.url = url
+            mediaSource.mediaFormat = if(extension=="mp4") PKMediaFormat.mp4 else PKMediaFormat.hls
         }
 
         return listOf(mediaSource)
