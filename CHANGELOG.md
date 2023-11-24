@@ -1,5 +1,6 @@
 ## 0.2.2
 - Updates to support flutter version 3.16.0
+- Fix issue [#33](https://github.com/What-the-Flutter/VR-Player/issues/33)
 
 ## 0.2.1
 - Fix issue [#10](https://github.com/What-the-Flutter/VR-Player/issues/10)
