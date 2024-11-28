@@ -93,6 +93,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _viewPlayerController.onPause();
+    super.dispose();
+  }
+
   void _toggleShowingBar() {
     switchVolumeSliderDisplay(show: false);
 
