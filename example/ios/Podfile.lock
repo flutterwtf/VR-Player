@@ -1,0 +1,73 @@
+PODS:
+  - Flutter (1.0.0)
+  - KalturaNetKit (1.6.1):
+    - KalturaNetKit/Core (= 1.6.1)
+  - KalturaNetKit/Core (1.6.1):
+    - SwiftyJSON (= 5.0.0)
+  - ObjcExceptionBridging (7.1.5):
+    - ObjcExceptionBridging/ObjcExceptionBridging (= 7.1.5)
+  - ObjcExceptionBridging/ObjcExceptionBridging (7.1.5)
+  - PlayKit/AnalyticsCommon (3.28.0):
+    - PlayKit/Core
+  - PlayKit/Core (3.28.0):
+    - KalturaNetKit (~> 1.6.1)
+    - PlayKitUtils (~> 0.5)
+    - SwiftyJSON (= 5.0.0)
+    - XCGLogger (= 7.0.0)
+  - PlayKitProviders (1.18.3):
+    - KalturaNetKit (~> 1.6.1)
+    - PlayKit/AnalyticsCommon (~> 3.27)
+    - PlayKitUtils (~> 0.5)
+    - SwiftyXMLParser (= 5.0.0)
+  - PlayKitUtils (0.5.1)
+  - PlayKitVR (1.3.0):
+    - PlayKit/Core
+  - SwiftyJSON (5.0.0)
+  - SwiftyXMLParser (5.0.0)
+  - vr_player (0.0.1):
+    - Flutter
+    - PlayKitProviders
+    - PlayKitVR (~> 1.3.0)
+  - XCGLogger (7.0.0):
+    - XCGLogger/Core (= 7.0.0)
+  - XCGLogger/Core (7.0.0):
+    - ObjcExceptionBridging
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - vr_player (from `.symlinks/plugins/vr_player/ios`)
+
+SPEC REPOS:
+  trunk:
+    - KalturaNetKit
+    - ObjcExceptionBridging
+    - PlayKit
+    - PlayKitProviders
+    - PlayKitUtils
+    - PlayKitVR
+    - SwiftyJSON
+    - SwiftyXMLParser
+    - XCGLogger
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  vr_player:
+    :path: ".symlinks/plugins/vr_player/ios"
+
+SPEC CHECKSUMS:
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  KalturaNetKit: 2af6c3c2a1abbd8936b5acde45f33f5195125f4a
+  ObjcExceptionBridging: d3d37d62981bb7f252ecb31b62d7e23a96bbfb8a
+  PlayKit: 91b18b80ca59331722ce3738c14b8f469279686d
+  PlayKitProviders: 11784ad16e6300d0e7948414e89bc14253e9da05
+  PlayKitUtils: 4a11aef6488e778d10b774702ba79dd0cfa0ef11
+  PlayKitVR: f8e0d16d011b7092838819d4e649d5d77923b62d
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+  SwiftyXMLParser: 5ebb8793192f403fa8cc691045143906122a7a75
+  vr_player: 3b22470823baa03523a3b79bd298b9dda58e079f
+  XCGLogger: 0434f15e3909cdc450bb63faf638b8792ab782ab
+
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+
+COCOAPODS: 1.16.2
