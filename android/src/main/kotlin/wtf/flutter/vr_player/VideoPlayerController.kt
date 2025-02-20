@@ -116,7 +116,10 @@ class VideoPlayerController(
             "isPlaying" -> {
                 result.success(player?.isPlaying == true)
             }
-
+            "dispose" -> {
+                dispose()
+                result.success(true)
+            }
             "onSizeChanged" -> {
                 if (mediaEntry?.isVRMediaType == true) {
                     reloadPlayer()
@@ -333,6 +336,11 @@ class VideoPlayerController(
             it.destroy()
         }
         player = null
+
+        playerEventStateChanged = null
+        playerEventDurationChanged = null
+        playerEventPosition = null
+        playerEventEnded = null
     }
 
     inner class VideoPlayerState(val currentPosition: Long = 0, val isPlaying: Boolean = false)

@@ -310,7 +310,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderSt
     if (!_isVideoLoaded) {
       Future.delayed(Duration.zero, () async {
         await _viewPlayerController.loadVideo(
-          videoUrl: 'https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8',
+          videoUrl: 'https://cdn.deinerstertag.de/video/OKO_TECH-Industriemechaniker_in-KE-GR-V01/HLS/master.m3u8',
         );
         if (!mounted) return;
         setState(() {
