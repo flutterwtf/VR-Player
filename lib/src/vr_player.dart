@@ -48,7 +48,8 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
   void didUpdateWidget(VrPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.width != widget.width) {
-      final pixelRatio = Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1;
+      final pixelRatio =
+          Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1;
 
       final width = widget.width * pixelRatio;
       final height = widget.height * pixelRatio;
@@ -100,7 +101,8 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
                 return AndroidViewSurface(
                   controller: controller as AndroidViewController,
                   hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                  gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{
+                  gestureRecognizers: const <Factory<
+                      OneSequenceGestureRecognizer>>{
                     Factory(TapGestureRecognizer.new),
                   },
                 );
