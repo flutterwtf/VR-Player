@@ -90,31 +90,41 @@ class VideoPlayerController(
                     loadMedia(it, result)
                 }
             }
+
             "seekTo" -> {
                 (methodCall.arguments as? HashMap<*, *>)?.get("position")?.toString()
                     ?.toLongOrNull()?.let { position ->
-                    player?.let {
-                        if (position < it.duration) {
-                            it.seekTo(position)
-                            result.success(methodCall.arguments)
+                        player?.let {
+                            if (position < it.duration) {
+                                it.seekTo(position)
+                                result.success(methodCall.arguments)
+                            }
                         }
                     }
-                }
             }
+
             "setVolume" -> {
                 val volume: Float = methodCall.argument("volume")!!
                 player?.setVolume(volume)
             }
+
             "play" -> {
                 player?.play()
                 result.success(true)
             }
+
             "pause" -> {
                 player?.pause()
                 result.success(true)
             }
+
             "isPlaying" -> {
                 result.success(player?.isPlaying == true)
+            }
+
+            "dispose" -> {
+                dispose(false)
+                result.success(true)
             }
 
             "onSizeChanged" -> {
@@ -127,23 +137,27 @@ class VideoPlayerController(
                 }
                 result.success(true)
             }
+
             "toggleVRMode" -> {
                 toggleVRMode()
             }
+
             "fullScreen" -> {
                 if (mediaEntry?.isVRMediaType == true) {
-                    dispose()
+                    dispose(true)
                 }
                 result.success(true)
             }
+
             "onPause" -> {
                 if (mediaEntry?.isVRMediaType == true) {
-                    dispose()
+                    dispose(false)
                 } else {
                     player?.onApplicationPaused()
                 }
                 result.success(true)
             }
+
             "onResume" -> {
                 if (mediaEntry?.isVRMediaType == true) {
                     reloadPlayer()
@@ -152,12 +166,14 @@ class VideoPlayerController(
                 }
                 result.success(true)
             }
+
             "onOrientationChanged" -> {
                 if (mediaEntry?.isVRMediaType == true) {
-                    dispose()
+                    dispose(true)
                 }
                 result.success(true)
             }
+
             else -> result.notImplemented()
         }
     }
@@ -177,6 +193,7 @@ class VideoPlayerController(
             isVRModeEnabled = !isVRModeEnabled
         }
     }
+
     private fun loadMedia(videoUrl: HashMap<*, *>, result: MethodChannel.Result?) {
         this.videoUrl = videoUrl
         this.mediaEntry = createMediaEntry(videoUrl)
@@ -229,16 +246,16 @@ class VideoPlayerController(
         // Set the format of the source.
         // In our case it will be hls
         // in case of mpd/wvm formats you have to to call mediaSource.setDrmData method as well
-        if (videoUrl.get("videoPath") != null){
+        if (videoUrl.get("videoPath") != null) {
             val url = videoUrl.get("videoPath") as String
             val extension = url.substringAfterLast('.', "");
             mediaSource.url = url
-            mediaSource.mediaFormat = if(extension=="mp4") PKMediaFormat.mp4 else PKMediaFormat.hls
+            mediaSource.mediaFormat = if (extension == "mp4") PKMediaFormat.mp4 else PKMediaFormat.hls
         } else {
             val url = videoUrl.get("videoUrl") as String
             val extension = url.substringAfterLast('.', "");
             mediaSource.url = url
-            mediaSource.mediaFormat = if(extension=="mp4") PKMediaFormat.mp4 else PKMediaFormat.hls
+            mediaSource.mediaFormat = if (extension == "mp4") PKMediaFormat.mp4 else PKMediaFormat.hls
         }
 
         return listOf(mediaSource)
@@ -288,12 +305,15 @@ class VideoPlayerController(
                     }
                     playerEventStateChanged?.success(mapOf(Pair("state", 1)))
                 }
+
                 PlayerState.LOADING -> {
                     playerEventStateChanged?.success(mapOf(Pair("state", 0)))
                 }
+
                 PlayerState.BUFFERING -> {
                     playerEventStateChanged?.success(mapOf(Pair("state", 2)))
                 }
+
                 else -> {}
             }
         }
@@ -327,13 +347,22 @@ class VideoPlayerController(
         return vrSettings
     }
 
-    fun dispose() {
+    fun dispose(isRebuilding: Boolean = false) {
         player?.let {
             this.videoPlayerState = VideoPlayerState(it.currentPosition, it.isPlaying)
-            it.destroy()
+
+            if (!isRebuilding) {
+                it.destroy()
+                player = null
+            }
         }
-        player = null
+
+        playerEventStateChanged = null
+        playerEventDurationChanged = null
+        playerEventPosition = null
+        playerEventEnded = null
     }
+
 
     inner class VideoPlayerState(val currentPosition: Long = 0, val isPlaying: Boolean = false)
 }
