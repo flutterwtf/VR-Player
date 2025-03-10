@@ -34,8 +34,8 @@ class VrPlayer extends StatefulWidget {
 }
 
 class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
-  late VrPlayerController _videoPlayerController;
-  late VrPlayerObserver _playerObserver;
+  VrPlayerController? _videoPlayerController;
+  VrPlayerObserver? _playerObserver;
   bool _wasResumed = false;
 
   @override
@@ -48,13 +48,12 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
   void didUpdateWidget(VrPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.width != widget.width) {
-      final pixelRatio =
-          Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1;
+      final pixelRatio = Platform.isAndroid ? MediaQuery.of(context).devicePixelRatio : 1;
 
       final width = widget.width * pixelRatio;
       final height = widget.height * pixelRatio;
 
-      _videoPlayerController.onSizeChanged(width, height);
+      _videoPlayerController?.onSizeChanged(width, height);
     }
   }
 
@@ -62,19 +61,18 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       _wasResumed = true;
-      await _videoPlayerController.onResume();
+      await _videoPlayerController?.onResume();
     } else if (state == AppLifecycleState.paused) {
-      await _videoPlayerController.onPause();
+      await _videoPlayerController?.onPause();
     }
     super.didChangeAppLifecycleState(state);
   }
 
   @override
   void dispose() {
-    if (Platform.isIOS) {
-      _playerObserver.cancelListeners();
-      _videoPlayerController.pause();
-    }
+    _playerObserver?.cancelListeners();
+    _videoPlayerController?.pause();
+    _videoPlayerController?.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -83,7 +81,7 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
   Future<void> didChangeMetrics() async {
     super.didChangeMetrics();
     if (!_wasResumed) {
-      await _videoPlayerController.onOrientationChanged();
+      await _videoPlayerController?.onOrientationChanged();
     }
     _wasResumed = false;
   }
@@ -102,8 +100,7 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
                 return AndroidViewSurface(
                   controller: controller as AndroidViewController,
                   hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                  gestureRecognizers: const <Factory<
-                      OneSequenceGestureRecognizer>>{
+                  gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{
                     Factory(TapGestureRecognizer.new),
                   },
                 );
@@ -141,6 +138,6 @@ class _VideoPlayerState extends State<VrPlayer> with WidgetsBindingObserver {
   void onPlatformViewCreated(int id) {
     _videoPlayerController = VrPlayerController.init(id);
     _playerObserver = VrPlayerObserver.init(id);
-    widget.onCreated(_videoPlayerController, _playerObserver);
+    widget.onCreated(_videoPlayerController!, _playerObserver!);
   }
 }
