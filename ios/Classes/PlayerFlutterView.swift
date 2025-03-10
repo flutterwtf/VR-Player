@@ -123,9 +123,17 @@ final class PlayerFlutterView: NSObject, FlutterPlatformView {
             onPause(arguments: call.arguments, result: result)
         case "onResume":
             onResume(arguments: call.arguments, result: result)
+        case "dispose":
+            dispose(result: result)
         default:
             methodCall(arguments: call.arguments, result: result)
         }
+    }
+
+    private func dispose(result: FlutterResult) {
+        player.stop()
+        player.view = nil
+        result(true)
     }
     
     private func methodCall(arguments: Any?, result: FlutterResult) {

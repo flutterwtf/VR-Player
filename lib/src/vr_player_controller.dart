@@ -41,6 +41,10 @@ class VrPlayerController {
     return _channel.invokeMethod('pause');
   }
 
+  Future<void> dispose() {
+    return _channel.invokeMethod('dispose');
+  }
+
   /// Set player volume from 0 to 1
   Future<void> setVolume(double volume) async {
     try {

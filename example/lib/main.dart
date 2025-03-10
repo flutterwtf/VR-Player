@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vr_player/vr_player.dart';
@@ -8,7 +10,7 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -33,13 +35,14 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      key: const Key("start_video_button"),
       onPressed: buttonOnPressed,
       child: const Text('Start Video'),
     );
@@ -59,11 +62,10 @@ class VideoPlayerPage extends StatefulWidget {
   const VideoPlayerPage({super.key});
 
   @override
-  _VideoPlayerPageState createState() => _VideoPlayerPageState();
+  State<VideoPlayerPage> createState() => _VideoPlayerPageState();
 }
 
-class _VideoPlayerPageState extends State<VideoPlayerPage>
-    with TickerProviderStateMixin {
+class _VideoPlayerPageState extends State<VideoPlayerPage> with TickerProviderStateMixin {
   late VrPlayerController _viewPlayerController;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -71,11 +73,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   bool _isPlaying = false;
   bool _isFullScreen = false;
   bool _isVideoFinished = false;
+  bool _isVideoLoaded = false;
   bool _isLandscapeOrientation = false;
   bool _isVolumeSliderShown = false;
   bool _isVolumeEnabled = true;
-  late double _playerWidth;
-  late double _playerHeight;
   String? _duration;
   int? _intDuration;
   bool isVideoLoading = false;
@@ -86,11 +87,19 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
     _toggleShowingBar();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    if (Platform.isAndroid) {
+      _viewPlayerController.onPause();
+    }
+    super.dispose();
   }
 
   void _toggleShowingBar() {
@@ -106,11 +115,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   @override
   Widget build(BuildContext context) {
-    _playerWidth = MediaQuery.of(context).size.width;
-    _playerHeight =
-        _isFullScreen ? MediaQuery.of(context).size.height : _playerWidth / 2;
-    _isLandscapeOrientation =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    _isLandscapeOrientation = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
       appBar: AppBar(
@@ -122,11 +127,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
           alignment: Alignment.bottomCenter,
           children: <Widget>[
             VrPlayer(
+              key: const Key("vr_player"),
               x: 0,
               y: 0,
               onCreated: onViewPlayerCreated,
-              width: _playerWidth,
-              height: _playerHeight,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width * 9 / 16,
             ),
             Positioned(
               bottom: 0,
@@ -139,6 +145,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                   child: Row(
                     children: <Widget>[
                       IconButton(
+                        key: const Key("play_pause_button"),
                         icon: Icon(
                           _isVideoFinished
                               ? Icons.replay
@@ -181,25 +188,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
                         ),
                       ),
                       Text(
+                        
                         _duration?.toString() ?? '99:99',
+                        key: const Key("duration_text"),
                         style: const TextStyle(color: Colors.white),
                       ),
                       if (_isFullScreen || _isLandscapeOrientation)
                         IconButton(
                           icon: Icon(
-                            _isVolumeEnabled
-                                ? Icons.volume_up_rounded
-                                : Icons.volume_off_rounded,
+                            _isVolumeEnabled ? Icons.volume_up_rounded : Icons.volume_off_rounded,
                             color: Colors.white,
                           ),
-                          onPressed: () =>
-                              switchVolumeSliderDisplay(show: true),
+                          onPressed: () => switchVolumeSliderDisplay(show: true),
                         ),
                       IconButton(
                         icon: Icon(
-                          _isFullScreen
-                              ? Icons.fullscreen_exit
-                              : Icons.fullscreen,
+                          _isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
                           color: Colors.white,
                         ),
                         onPressed: fullScreenPressed,
@@ -245,28 +249,31 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   }
 
   Future<void> fullScreenPressed() async {
-    await _viewPlayerController.fullScreen();
+    if (Platform.isAndroid) {
+      await _viewPlayerController.fullScreen();
+    }
+
     setState(() {
       _isFullScreen = !_isFullScreen;
     });
 
     if (_isFullScreen) {
-      SystemChrome.setPreferredOrientations([
+      await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
       ]);
-      SystemChrome.setEnabledSystemUIMode(
+      await SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.manual,
         overlays: [],
       );
     } else {
-      SystemChrome.setPreferredOrientations([
+      await SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
       ]);
-      SystemChrome.setEnabledSystemUIMode(
+      await SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.manual,
         overlays: SystemUiOverlay.values,
       );
@@ -293,32 +300,38 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   void onViewPlayerCreated(
     VrPlayerController controller,
     VrPlayerObserver observer,
-  ) {
+  ) async {
     _viewPlayerController = controller;
     observer
       ..onStateChange = onReceiveState
       ..onDurationChange = onReceiveDuration
       ..onPositionChange = onChangePosition
       ..onFinishedChange = onReceiveEnded;
-    _viewPlayerController.loadVideo(
-      videoUrl:
-          'https://cdn.bitmovin.com/content/assets/playhouse-vr/m3u8s/105560.m3u8',
-    );
+    if (!_isVideoLoaded) {
+      Future.delayed(Duration.zero, () async {
+        await _viewPlayerController.loadVideo(
+          videoUrl: 'https://cdn.deinerstertag.de/video/OKO_TECH-Industriemechaniker_in-KE-GR-V01/HLS/master.m3u8',
+        );
+        if (!mounted) return;
+        setState(() {
+          _isVideoLoaded = true;
+        });
+      });
+    }
   }
 
   void onReceiveState(VrState state) {
+    if (!mounted) return;
     switch (state) {
       case VrState.loading:
         setState(() {
           isVideoLoading = true;
         });
-        break;
       case VrState.ready:
         setState(() {
           isVideoLoading = false;
           isVideoReady = true;
         });
-        break;
       case VrState.buffering:
       case VrState.idle:
         break;
@@ -326,6 +339,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   }
 
   void onReceiveDuration(int millis) {
+    if (!mounted) return;
     setState(() {
       _intDuration = millis;
       _duration = millisecondsToDateTime(millis);
@@ -333,6 +347,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
   }
 
   void onChangePosition(int millis) {
+    if (!mounted) return;
     setState(() {
       _currentPosition = millisecondsToDateTime(millis);
       _seekPosition = millis.toDouble();
@@ -341,6 +356,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   // ignore: avoid_positional_boolean_parameters
   void onReceiveEnded(bool isFinished) {
+    if (!mounted) return;
     setState(() {
       _isVideoFinished = isFinished;
     });
@@ -360,8 +376,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     });
   }
 
-  String millisecondsToDateTime(int milliseconds) =>
-      setDurationText(Duration(milliseconds: milliseconds));
+  String millisecondsToDateTime(int milliseconds) => setDurationText(Duration(milliseconds: milliseconds));
 
   String setDurationText(Duration duration) {
     String twoDigits(int n) {

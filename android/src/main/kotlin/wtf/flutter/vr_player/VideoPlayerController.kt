@@ -116,7 +116,10 @@ class VideoPlayerController(
             "isPlaying" -> {
                 result.success(player?.isPlaying == true)
             }
-
+            "dispose" -> {
+                dispose(false)
+                result.success(true)
+            }
             "onSizeChanged" -> {
                 if (mediaEntry?.isVRMediaType == true) {
                     reloadPlayer()
@@ -132,13 +135,13 @@ class VideoPlayerController(
             }
             "fullScreen" -> {
                 if (mediaEntry?.isVRMediaType == true) {
-                    dispose()
+                    dispose(true)
                 }
                 result.success(true)
             }
             "onPause" -> {
                 if (mediaEntry?.isVRMediaType == true) {
-                    dispose()
+                    dispose(false)
                 } else {
                     player?.onApplicationPaused()
                 }
@@ -154,7 +157,7 @@ class VideoPlayerController(
             }
             "onOrientationChanged" -> {
                 if (mediaEntry?.isVRMediaType == true) {
-                    dispose()
+                    dispose(true)
                 }
                 result.success(true)
             }
@@ -327,12 +330,20 @@ class VideoPlayerController(
         return vrSettings
     }
 
-    fun dispose() {
+    fun dispose(isRebuilding: Boolean = false) {
         player?.let {
             this.videoPlayerState = VideoPlayerState(it.currentPosition, it.isPlaying)
-            it.destroy()
+
+            if (!isRebuilding) {
+                it.destroy()
+                player = null
+            }
         }
-        player = null
+
+        playerEventStateChanged = null
+        playerEventDurationChanged = null
+        playerEventPosition = null
+        playerEventEnded = null
     }
 
     inner class VideoPlayerState(val currentPosition: Long = 0, val isPlaying: Boolean = false)

@@ -32,29 +32,29 @@ class VrPlayerObserver {
     _eventChannelState = EventChannel('vr_player_events_${id}_state');
     _stateSubscription =
         _eventChannelState.receiveBroadcastStream().listen((event) {
-      // ignore: avoid_dynamic_calls
-      onStateChange?.call(VrState.values[event['state']]);
+      final data = event as Map<dynamic, dynamic>;
+      onStateChange?.call(VrState.values[data['state']]);
     });
 
     _eventChannelDuration = EventChannel('vr_player_events_${id}_duration');
     _durationSubscription =
         _eventChannelDuration.receiveBroadcastStream().listen((event) {
-      // ignore: avoid_dynamic_calls
-      onDurationChange?.call(event['duration']);
+      final data = event as Map<dynamic, dynamic>;
+      onDurationChange?.call(data['duration']);
     });
 
     _eventChannelPosition = EventChannel('vr_player_events_${id}_position');
     _positionSubscription =
         _eventChannelPosition.receiveBroadcastStream().listen((event) {
-      // ignore: avoid_dynamic_calls
-      onPositionChange?.call(event['currentPosition']);
+      final data = event as Map<dynamic, dynamic>;
+      onPositionChange?.call(data['currentPosition']);
     });
 
     _eventChannelEnded = EventChannel('vr_player_events_${id}_ended');
     _endedSubscription =
         _eventChannelEnded.receiveBroadcastStream().listen((event) {
-      // ignore: avoid_dynamic_calls
-      onFinishedChange?.call(event['ended'] ?? false);
+      final data = event as Map<dynamic, dynamic>;
+      onFinishedChange?.call(data['ended'] ?? false);
     });
   }
 

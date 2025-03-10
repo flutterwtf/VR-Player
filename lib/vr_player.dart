@@ -4,7 +4,7 @@
 /// immersive, 360, or spherical videos, are captured by utilizing
 /// an omnidirectional camera or multiple cameras to record
 /// the entire panoramic view simultaneously.
-library vr_player;
+library;
 
 export 'src/vr_player.dart';
 export 'src/vr_player_controller.dart';
