@@ -1,4 +1,9 @@
-## 0.2.2
+## 0.3.0
+- Updates to support flutter version 3.29.0
+- Update plugin configuration to be usable in gradle 8 projects
+- Fix issue [#46](https://github.com/flutterwtf/VR-Player/issues/46)
+
+- ## 0.2.2
 - Updates to support flutter version 3.16.0
 - Fix issue [#33](https://github.com/What-the-Flutter/VR-Player/issues/33)
 
